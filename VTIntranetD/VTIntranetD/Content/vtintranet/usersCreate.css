@@ -1,0 +1,75 @@
+﻿.divtags {
+    padding: 0px;
+    width: 95%;
+    /*border: 1px solid;*/
+    display: grid;
+    margin: 0 auto;
+}
+
+.mtags th {
+    border-collapse: separate;
+    border-spacing: 10px 15px;
+    text-align: center;
+    background: #21356a;
+    color: white;
+    font-family: Helvetica, Arial;
+    text-transform: uppercase;
+    font-size: smaller;
+    border: 1px solid #f4f4f4;
+}
+
+.mtags td {
+    border-collapse: separate;
+    border-spacing: 10px 15px;
+    text-align: center;
+    border: 1px solid #f4f4f4;
+    height: 50px;
+    color: #555;
+    /*box-shadow: 2px 2px 1px #888888;*/
+    width: 15%;
+}
+
+.btn_control {
+    margin-left: 75%;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: 'Helvetica', Arial, sans-serif;
+    font-size: .8em;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+    border: 0;
+    position: relative;
+    margin-left: 73%;
+}
+
+.btn_on {
+    background: rgb(0, 175, 140);
+}
+
+.btn_off {
+    background: rgb(233, 54, 40);
+}
+
+.disable {
+    background: #999;
+}
+
+.enable {
+    color: #0717e8 !important;
+    background: #7fdc9c;
+}
+
+.modal-header {
+    border-bottom-color: #f4f4f4;
+    height: 40px;
+}
+
+.add {
+    position: relative;
+    cursor: pointer;
+    right: 0px;
+    left: 5px;
+    text-align: left;
+}
+
+

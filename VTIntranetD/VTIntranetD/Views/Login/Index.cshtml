@@ -1,0 +1,127 @@
+﻿@model VTIntranetD.Models.Entities.User
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="~/Scripts/login/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Scripts/login/css/util.css">
+    <link rel="stylesheet" type="text/css" href="~/Scripts/login/css/main.css">
+ 
+    <style>
+        .login {
+            background-image: url("/UploadedFiles/login.jpg");
+            max-width: 100%;
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+        }
+
+        .wrap-login100 {
+            margin: 0 auto;
+            background: transparent;
+            width: 60%
+        }
+
+        .login100-form {
+            background: #fff;
+            padding: 30px
+        }
+
+        .login100-form-title {
+            font-family: Poppins-Regular;
+        }
+
+        .content-login{
+            background: white;
+        }
+
+        .txtTmp {
+            border: 1px solid blue;
+            
+        }
+
+        .b-2 {
+            color: #001c40
+        }
+
+        .b-1 {
+            color: #7f7f7f
+        }
+
+        .logo-vtimes {
+            text-align: center;
+            padding: 20px 0;
+            background: #092d52
+        }
+
+            .logo-vtimes img {
+                height: 50px
+            }
+
+        button.login100-form-btn {
+            box-shadow: none;
+        }
+
+        .container-login100-form-btn {
+            padding: 50px 0 20px;
+        }
+
+        .focus-input100::before {
+            background: #092d52;
+        }
+
+        .wrap-input100 {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login">
+        <div class="wrap-login100 p-t-85 p-b-20">
+            <div class="logo-vtimes"><img src="~/UploadedFiles/vtimes_logo.png" /></div>
+            @using (Html.BeginForm("Index", "Login", FormMethod.Post))
+            {
+                <div class="content-login">
+                    <p class="login100-form-title py-3">
+                        <span class="b-1">¡Bienvenido a</span> <span class="b-2">VTintranet!</span>
+                    </p>
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    @if (@ViewBag.Message != null)
+                    {
+                        <div style="border: 1px solid red">
+                            @ViewBag.Message
+                        </div>
+                    }
+                <div class="wrap-input100 validate-input m-t-85 m-b-35" data-validate="Enter user name">
+                    @Html.LabelFor(a => a.username)
+                    @Html.TextBoxFor(a => a.username, new { @class = "input100" })
+                    @Html.ValidationMessageFor(a => a.username)
+                   
+                </div>
+                <div class="wrap-input100 validate-input m-b-50" data-validate="Enter password">
+                    @Html.LabelFor(a => a.password)
+                  
+                        @Html.PasswordFor(a => a.password, new { @class = "input100" })
+                    
+                        @Html.ValidationMessageFor(a => a.password)
+                  </div>
+                <div class="container-login100-form-btn">
+                    <input class="login100-form-btn" type="submit" value="Login" />
+                </div>
+                </div>
+            }
+        </div>
+    </div>
+    
+</body>
+</html>
+
+
+
+

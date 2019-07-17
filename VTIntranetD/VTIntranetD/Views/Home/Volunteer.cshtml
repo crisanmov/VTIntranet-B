@@ -1,0 +1,87 @@
+﻿<style>
+    #AXKAN {
+        display: flex;
+        color: #767676
+    }
+    #AXKAN > div:first-child {
+        width: 60%
+    }
+    #AXKAN > div:last-child {
+        width: 40%
+    }
+    h2.AXKAN {
+        text-transform: uppercase;
+        font-size: 40px;
+        color: #21356a;
+        font-weight: 700
+    }
+    #AXKAN b {
+        text-align: center;
+        font-weight: 900
+    }
+    #axkan-form textarea {
+        height: 60px
+    }
+    #axkan-form textarea, #axkan-form input {
+        width: 100%;
+        margin-bottom: 16px;
+        resize: none;
+        max-width: 100%;
+        border: 2px solid #b2b0b0;
+    }
+    .separador-div {
+        width: 3px;
+        background: #21356a;
+        margin: 0 50px;
+    }
+    #axkan-form [type="submit"] {
+        width: 50%;
+        background: #21356a;
+        padding: 10px;
+        margin: 0 25%;
+        color: #fff;
+    }
+    #axkan-dad {
+        width: 90%;
+        margin: 30px auto 0;
+    }
+    #axkan-dad p {
+        text-align: justify;
+    }
+</style>
+<div id="axkan-dad">
+    <h2 class="AXKAN">Voluntariado <br>Axkan</h2>
+    <div id="AXKAN">
+        <div>
+            <p>
+                AXKAN es una Fundación SIN FINES DE LUCRO cuya finalidad es crear oportunidades de desarrollo para las comunidades, especialmente para niños y jóvenes. AXKAN, como fundación privada, no tiene vinculos con instituciones de gobierno ni con partidos politicos y depende de las donacionesde fundadores,  voluntarios, empresas y sociedad civil en AXKAN.
+            </p>
+            <h3>El voluntariado AXKAN consiste en:</h3>
+            <ul>
+                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hic, aliquam, assumenda. Atque, necessitatibus. Expedita molestias, necessitatibus cupiditate laudantium distinctio voluptatibus repudiandae vero ex facere praesentium soluta quibusdam esse, commodi labore.</li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore quaerat reiciendis, eveniet cupiditate impedit voluptatum, deleniti optio, quas blanditiis, ad assumenda odit! Officia commodi repellendus et, aspernatur aliquid necessitatibus facere.</li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore eius architecto quasi corrupti molestiae tempore asperiores, quam totam, laboriosam, animi, voluptatem incidunt. Pariatur quo eius officia omnis ex cupiditate odio?</li>
+            </ul>
+            <p>
+                Para mayor información manda un mensaje por nuestro formulario, explicando la idea a implementar y tus datos personales.
+            </p><br />
+            <p style="text-align:center"><b>Gracias por apoyar a AXKAN</b></p>
+        </div>
+        <div class="separador-div"></div>
+        <div>
+            <form id="axkan-form">
+                <label for="nombre">NOMBRE</label><br>
+                <input type="text" name="nombre"><br>
+                <label for="puesto">PUESTO</label><br>
+                <input type="text" name="puesto"><br>
+                <label for="email">NOMBRE</label><br>
+                <input type="text" name="email"><br>
+                <label for="mensaje">MENSAJE</label><br>
+                <textarea nombre="mensaje" resize></textarea>
+                <div style="text-align: center">
+                    <input type="submit" value="ENVIAR">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

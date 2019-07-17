@@ -1,0 +1,145 @@
+﻿<head>
+    <title></title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+    <link href='~/Content/vtintranet/events.css' rel='stylesheet' />
+
+</head>
+<div id="padredetodo" class="prueba">
+
+    <h3>@ViewBag.Message</h3>
+
+    @if (ViewBag.rolName == "admin")
+    {
+        <button type="button" class="btn btn-primary" style="margin-left: 1%" id="events">Nuevo Evento</button>
+        <button type="button" class="btn btn-primary" style="margin-left: 1%" id="del-img">Seleccionar</button>
+        <button id="deletear" class="btn btn-primary" style="margin-left:1%">Eliminar imagenes</button>
+    }
+    <br />
+    <hr />
+    <div id="eventos-padre" class="prueba">
+        @foreach (var field in ViewBag.events)
+        {
+            <div class="buttonlink">
+                <div class="card mb-3 ">
+                    <input type="checkbox" id="/@field.FileName">
+                    <label for="/@field.FileName"></label>
+                    <div class="row no-gutters" style="display: flex; align-items: center;">
+                        <div class="col-xs-12  col-sm-6 col-md-4">
+                            <div class="hovereffect">
+                                <div class="">
+                                    <img class="img-responsive" src="~/UploadedFiles/events/@field.FileName" alt="">
+                                    <div class="overlay">
+                                        <p>
+                                            <a href="@field.Url" style="color:#122143; font-size:large" target="_blank">CLICK</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card-body" style="display: flex; flex-direction: column; justify-content: center;">
+                                <h5 class="card-title">@field.Title</h5>
+                                <p class="card-text">@field.Description</p>
+                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            @if (ViewBag.rolName == "admin")
+                            {
+                                <button class="btn btn-primary addImage" id="@field.IdEvent">Añadir Imagenes</button><br /><br />
+                            }
+                            @Html.ActionLink("Ir al Album", "Album", "Gallery", new { idEvent = @field.IdEvent }, new { @class = "btn btn-primary", @style = "color: white" })
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!--Modal for new event -->
+    <div class="modal fade" id="myModal3" role="dialog">
+        <div class="modal-dialog" style="">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Nuevo Evento</h4>
+                    <div id="validation"></div>
+                </div>
+                <!--form New Notice-->
+                <form method="post" action="/Home/SaveNotice">
+                    <div class="modal-body">
+                        <div id="validationEvent"></div>
+                        <!--title-->
+                        <input class="form-control" type="text" placeholder="Titulo" name="title" id="titleEvt">
+                        <br />
+                        <div class="form-group row">
+                            <div class='col-sm-12'>
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1">Imagen</label>
+                                    <input type="file" class="btn btn-default" value="" id="fileEvt" accept="image/*" />
+                                </div>
+                            </div>
+                            <!--Url-->
+                            <div class='col-sm-12'>
+                                <div class="form-group">
+                                    <label for="url">URL</label>
+                                    <input class="form-control" type="text" placeholder="insertar URL " id="urlEvt" />
+                                </div>
+                            </div>
+                            <!--description-->
+                            <div class='col-sm-12'>
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1">Descripción</label>
+                                    <textarea class="form-control" id="desEvt" rows="6" style="resize: none" name="description"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <!--save notice-->
+                        <div style="text-align:right; padding:30px 5px">
+                            <input type="submit" class="btn btn-default" value="Guardar" id="btnSaveEvt" />
+                            <!--<button type="button" class="btn btn-default" data-dismiss="modal" id="btnClose">Cerrar</button>-->
+                        </div>
+
+                    </div>
+                </form>
+                <br />
+            </div>
+        </div>
+    </div>
+
+    <!--Modal for add images to album -->
+    <div class="container" id="">
+        <!-- Modal -->
+        <div class="modal fade" id="myModal4" role="dialog">
+            <div class="modal-dialog" style="height: 90%">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Agregar imagenes al Album</h4>
+                    </div>
+                    <br />
+                    <input style="margin-left: 5%;width:100%" type="file" id="files" name="files[]" multiple />
+                    <hr />
+                    <form enctype="multipart/form-data">
+                        <div class="img-container">
+                            <output id="list"></output>
+                        </div>
+                        <div style="text-align:right; padding:30px 15px">
+                            <input type="submit" class="btn btn-default" value="Guardar" id="btnSaveImg" />
+                            <!--<button type="button" class="btn btn-default" data-dismiss="modal" id="btnClose">Cerrar</button>-->
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src='~/Scripts/vtintranet/events.js'></script>
+

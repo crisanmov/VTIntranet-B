@@ -1,0 +1,156 @@
+﻿.attachment {
+    margin: 0px auto;
+    margin-top: 5%;
+    height: 300px;
+    width: 95%;
+    display: flex;
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+#brand-logo {
+    min-width: 300px;
+    height: 300px;
+    align-items: center;
+    justify-content: center;
+    background: #ececec;
+    display: flex
+}
+
+#brand-text {
+    width: -webkit-fill-available;
+    background: #f0f0f0;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    display: flex
+}
+
+#brand-deptos {
+    width: 95%;
+    margin: 0px auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.area {
+    background: #122143;
+    padding: 15px 0;
+    margin: 30px auto;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+    width: 15%;
+    text-align: center;
+    cursor: pointer;
+}
+
+#contentFile {
+    margin: 0px auto;
+    width: 95%;
+}
+
+table {
+    background-color: transparent;
+    table-layout: auto;
+    width: 100%;
+    text-align: center;
+}
+
+tbody {
+    background: #d7d7d7;
+}
+
+td, th {
+    border: 5px solid #d7d7d7;
+    padding: 5px;
+}
+
+th {
+    color: #686868;
+    text-align: center;
+}
+
+td {
+    font-weight: 600
+}
+
+.inc, .ad, .gs, .inh, .vtech, .vt, .wp, .cap {
+    display: none
+}
+
+#cap .cap, #im-c .inc, #AD .ad, #GS .gs, #im-h .inh, #v-tech .vtech, #vt .vt, #wp .wp,
+#CAP .cap, #IM-C .inc, #AD .ad, #GS .gs, #IM-H .inh, #V-TECH .vtech, #VT .vt, #WP .wp {
+    display: block
+}
+
+.cd-popup {
+    opacity: 0;
+    visibility: hidden;
+}
+
+    .cd-popup.is-visible {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.3s 0s, visibility 0s 0s;
+        position: absolute;
+        background: #77777785;
+        width: 100%;
+        left: 0;
+        height: 100%;
+        top: 0;
+        z-index: 9999;
+        position: fixed
+    }
+
+a.cd-popup-close.img-replace {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 15px
+}
+
+.del {
+    transition: border 5s
+}
+
+ul.cd-buttons .del:hover {
+    border: 1px solid #ddd;
+    padding: 15px;
+}
+
+.cd-popup-container {
+    transform: translateY(-40px);
+    transition-property: transform;
+    transition-duration: 0.3s;
+}
+
+    .cd-popup-container li {
+        list-style: none;
+    }
+
+.cd-buttons {
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 50px;
+    font-size: 20px;
+}
+
+.is-visible .cd-popup-container {
+    width: 30%;
+    transform: translateY(0);
+    margin: 0 auto;
+    position: relative;
+    top: 25%;
+    background: #f8f7f9;
+    text-align: center;
+    padding: 70px;
+    font-size: 25px
+}
+
+#attachments td i {
+    color: #21356a !important;
+    font-size: 19px;
+}
+

@@ -1,0 +1,68 @@
+﻿@model IEnumerable<VTIntranetD.Models.Entities.User>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.lastNameP)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.lastNameM)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.userActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.skype)
+            </th>
+            <th></th>
+        </tr>
+    
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.lastNameP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.lastNameM)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.userActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.skype)
+            </td>
+            <td>
+                <!--@Html.ActionLink("Edit", "Edit", new { id=item.idUser }) |
+                    @Html.ActionLink("Details", "Details", new { id=item.idUser }) |-->
+                @Html.ActionLink("Delete", "Delete", new { id = item.idUser })
+            </td>
+        </tr>
+    }
+    
+    </table>
+</body>
+</html>
