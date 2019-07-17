@@ -63,12 +63,9 @@ $(document).ready(function () {
         let userActive = $('#userActive').val();
         //data account
         let username = $('#username').val();
+        let rolName = $('#rolName').val();
         let pass1 = $('#password').val();
         let pass2 = $('#password2').val();
-
-        
-        //validate form
-        
 
         //save user
         let user = {
@@ -78,12 +75,12 @@ $(document).ready(function () {
             skype: skype,
             userActive: userActive,
             username: username,
-            password: pass1
+            password: pass1, 
+            password2: pass2,
         }; 
 
-        //prepare array rows databases
-        let deptosD = getPermissions(deptos);
-        saveUser(user, profileN, deptosD);
+        validateForm(user, profileN, rolName);
+
     });
 
 });
@@ -241,7 +238,7 @@ function popDepto(name) {
     deptos = tmp;
 }
 
-function saveUser(user, nameProfile, deptosD) {
+function saveUser(user, nameProfile, deptosD, rolName) {
     
     //var token = $('input[name=__RequestVerificationToken]').val();
     //console.log(token);
@@ -251,7 +248,7 @@ function saveUser(user, nameProfile, deptosD) {
         dataType: "json",
         type: "POST",
         contentType: "application/json; charset=utf-8",
-        data: JSON.stringify({ user: user, nameProfile: nameProfile, deptosD: deptosD}),
+        data: JSON.stringify({ user: user, nameProfile: nameProfile, deptosD: deptosD, rolName: rolName}),
         success: function (response) {
             console.log(response);
         },
@@ -322,3 +319,70 @@ function setStateCheck(index, name) {
 
 }
 
+function validateForm(user, profileN, rolName) {
+
+    
+    let res1 = validateBlankSpaces(user);
+    let res2 = validatePass(user);
+    let res3;
+
+    if (validateBlank(profileN) && validateBlank(rolName)) {
+        res3 = true;
+    } else {
+        res3 = false;
+    }
+    
+    if ((res1 && res2) && res3) { 
+        //prepare array rows databases
+        let deptosD = getPermissions(deptos);
+        saveUser(user, profileN, deptosD, rolName);
+        alert("DONE")
+    } else {
+        alert("ERROR AL ENVIAR EL FORMULARIO");
+    }
+}
+
+function validateBlank(field) {
+
+    if (field == "") {
+        alert("El Formulario NO debe contener campos vacios.");
+        return false;
+    } 
+
+    return true;
+}
+
+function validateBlankSpaces(user) {
+
+    for (field in user) {
+
+        if (user[field] == "") {
+            alert("El Formulario NO debe contener campos vacios.");
+            return false;
+        } 
+
+        if (user[field] == "seleccion") {
+            alert("Falta un campo de SELECCIONAR");
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function validatePass(user) {
+
+    if (user.password.length < 8 || user.password2.length < 8) {
+        alert("La contraseña debe tener una longitud de 8 caracteres");
+        return false;
+    }
+
+    if (user.password == user.password2) {
+        return true;
+    } else {
+        alert("Error: Las contraseñas NO coinciden.");
+        return false;
+    }
+
+    
+}
