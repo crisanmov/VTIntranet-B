@@ -461,4 +461,30 @@ table.table {
     width: 95%;
     margin: 0 auto;
 }
+i.fas.fa-user-plus {
+    color: #21356a;
+    font-size: 30px;
+    margin: 10px;
+    padding-left: 2.5%;
+}
+#areas-listas {
+    display: flex;
+    flex-wrap: wrap;
+}
 
+.contenedor-area {
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0 0px 0 10px;
+    border: 1px solid #ddd;
+    margin: 5px;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+}
+.borrar-area {
+    background: #0d172f;
+    padding: 5px 10px;
+    margin-left: 10px;
+    color: #fff;
+}

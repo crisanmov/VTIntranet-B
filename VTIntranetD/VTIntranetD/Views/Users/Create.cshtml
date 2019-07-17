@@ -14,23 +14,19 @@
         .modal-body {
             margin: 15px
         }
-        .fa-pencil-alt {
-            color: #000;
-            font-size: 15px;
+       
+        .fa-clipboard-list{
+            color:#21356a;
+            font-size: 20px;
         }
-        .fa-arrow-left {
-            font-size: 40px;
-            color: blue;
-        }
+        
     </style>
 </head>
 <body>
     @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
     {
         @Html.AntiForgeryToken()
-        <div>
-            <a href="@Url.Action("", "Index")"><i class="fas fa-arrow-left"></i></a>
-        </div>
+        
         <div class="form-horizontal pl-3">
             <h4>Información Personal</h4>
             <hr />

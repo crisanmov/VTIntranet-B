@@ -145,9 +145,9 @@ function drawMatTag(object_tag) {
             let btn = document.createElement('button');
             let p = document.createElement('p');
             let add = document.createElement('i');
-
+           
             add.style.display = 'none';
-            add.setAttribute('class', 'fas fa-pencil-alt add');
+            add.setAttribute('class', 'fas fa-clipboard-list add');
             td.setAttribute('class', 'disable');
             btn.setAttribute('value', idTag);
             btn.setAttribute('class', 'btn_control btn_off');

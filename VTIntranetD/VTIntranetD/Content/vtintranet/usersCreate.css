@@ -26,7 +26,6 @@
     height: 50px;
     color: #555;
     /*box-shadow: 2px 2px 1px #888888;*/
-    width: 15%;
 }
 
 .btn_control {
@@ -52,6 +51,10 @@
 
 .disable {
     background: #999;
+    display: inline-flex;
+    flex-direction: column-reverse;
+    justify-content: space-around;
+    width: 20%;
 }
 
 .enable {
@@ -64,12 +67,23 @@
     height: 40px;
 }
 
+
 .add {
-    position: relative;
-    cursor: pointer;
-    right: 0px;
-    left: 5px;
-    text-align: left;
+    font-size: 30px;
+    order: 2;
 }
 
-
+.enable {
+    display: inline-flex;
+    width: 20% !important;
+    margin: 0;
+    flex-direction: row-reverse;
+    justify-content: space-around;
+    align-items: center;
+}
+    .enable *, .disable * {
+        margin: 0;
+    }
+    .enable p {
+        order: 2;
+    }
