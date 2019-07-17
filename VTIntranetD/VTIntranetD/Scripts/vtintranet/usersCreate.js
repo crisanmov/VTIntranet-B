@@ -250,7 +250,9 @@ function saveUser(user, nameProfile, deptosD, rolName) {
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({ user: user, nameProfile: nameProfile, deptosD: deptosD, rolName: rolName}),
         success: function (response) {
-            console.log(response);
+            alert("El Usuario se ha generado correctamente");
+            $('#__AjaxAntiForgeryForm')[0].reset();
+            //console.log(response);
         },
         error: function (e) {
 
@@ -336,7 +338,6 @@ function validateForm(user, profileN, rolName) {
         //prepare array rows databases
         let deptosD = getPermissions(deptos);
         saveUser(user, profileN, deptosD, rolName);
-        alert("DONE")
     } else {
         alert("ERROR AL ENVIAR EL FORMULARIO");
     }

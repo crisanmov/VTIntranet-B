@@ -24,6 +24,8 @@ namespace VTIntranetD.Controllers
         // GET: Users
         public ActionResult Index()
         {
+            ViewBag.rolName = this.Session["rolName"];
+            ViewBag.UserName = this.Session["userName"];
             ViewBag.Navbar = SerializerNavBar();
             return View(db.User.ToList());
         }
@@ -46,6 +48,8 @@ namespace VTIntranetD.Controllers
         // GET: Users/Create
         public ActionResult Create()
         {
+            ViewBag.rolName = this.Session["rolName"];
+            ViewBag.UserName = this.Session["userName"];
             ViewBag.Navbar = SerializerNavBar();
             return View();
         }
