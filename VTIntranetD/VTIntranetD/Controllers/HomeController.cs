@@ -13,8 +13,29 @@ namespace VTIntranetD.Controllers
 {
     public class HomeController : Controller
     {
-        //Attachments
-        [HttpGet]
+        /*SECTIONS*/
+        public ActionResult Index()
+        {
+            if (Session["UserID"] != null)
+            {
+                NoticeHelper nh = new NoticeHelper();
+                var serializer = new JavaScriptSerializer();
+                var serializedResult = serializer.Serialize(nh.getAllNotice());
+
+                ViewBag.UserName = this.Session["userName"];
+                ViewBag.rolName = this.Session["rolName"];
+                ViewBag.news2 = serializedResult;
+                ViewBag.news = nh.getAllNotice();
+                ViewBag.Navbar = SerializerNavBar();
+
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login/Index");
+            }
+        }
+
         public ActionResult Attachment()
         {
             ViewBag.UserName = this.Session["userName"];
@@ -47,35 +68,124 @@ namespace VTIntranetD.Controllers
 
         }
 
-        public ActionResult Index()
+        public ActionResult About()
         {
-            if(Session["UserID"] != null)
-            {
-                var idProfile = Session["ProfileID"].ToString();
+            var idProfile = Session["ProfileID"].ToString();
+            ViewBag.UserName = this.Session["userName"];
+            //helpers models
+            TagHelper th = new TagHelper();
 
-                TagHelper th = new TagHelper();
-                NoticeHelper nh = new NoticeHelper();
-                ViewBag.UserName = this.Session["userName"];
-                ViewBag.rolName = this.Session["rolName"];
+            //serializers
+            var serializer = new JavaScriptSerializer();
+            var sNav = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
 
-                var serializer = new JavaScriptSerializer();
-                var sR = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
-                ViewBag.Navbar = sR;
+            ViewBag.Navbar = sNav;
 
-                //serializer for notices "calendar"
-                var serializedResult = serializer.Serialize(nh.getAllNotice());
-                ViewBag.news2 = serializedResult;
-
-                //notices for grid view
-                ViewBag.news = nh.getAllNotice();
-
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Login/Index");
-            }
+            return View();
         }
+
+        public ActionResult Contact()
+        {
+            var idProfile = Session["ProfileID"].ToString();
+            ViewBag.UserName = this.Session["userName"];
+            //helpers models
+            TagHelper th = new TagHelper();
+
+            //serializers
+            var serializer = new JavaScriptSerializer();
+            var sNav = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
+
+            ViewBag.Navbar = sNav;
+
+            return View();
+        }
+
+        public ActionResult Directory()
+        {
+            var idProfile = Session["ProfileID"].ToString();
+            ViewBag.rolName = this.Session["rolName"];
+            ViewBag.UserName = this.Session["userName"];
+            //helpers models
+            TagHelper th = new TagHelper();
+
+            //serializers
+            var serializer = new JavaScriptSerializer();
+            var sNav = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
+
+            ViewBag.Navbar = sNav;
+
+            return View();
+        }
+
+        public ActionResult Events()
+        {
+            ViewBag.UserName = this.Session["userName"];
+            ViewBag.rolName = this.Session["rolName"];
+            var idProfile = Session["ProfileID"].ToString();
+            //helpers models
+            TagHelper th = new TagHelper();
+
+            //serializers
+            var serializer = new JavaScriptSerializer();
+            var sNav = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
+            ViewBag.Navbar = sNav;
+
+            //events
+            EventHelper eh = new EventHelper();
+            ViewBag.events = eh.GetAllEvent();
+
+
+            return View();
+        }
+
+        public ActionResult Post()
+        {
+            ViewBag.UserName = this.Session["userName"];
+            var idProfile = Session["ProfileID"].ToString();
+            //helpers models
+            TagHelper th = new TagHelper();
+
+            //serializers
+            var serializer = new JavaScriptSerializer();
+            var sNav = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
+
+            ViewBag.Navbar = sNav;
+
+            return View();
+        }
+
+        public ActionResult Talend()
+        {
+            ViewBag.UserName = this.Session["userName"];
+            var idProfile = Session["ProfileID"].ToString();
+            //helpers models
+            TagHelper th = new TagHelper();
+
+            //serializers
+            var serializer = new JavaScriptSerializer();
+            var sNav = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
+
+            ViewBag.Navbar = sNav;
+
+            return View();
+        }
+
+        public ActionResult Volunteer()
+        {
+            ViewBag.UserName = this.Session["userName"];
+            var idProfile = Session["ProfileID"].ToString();
+            //helpers models
+            TagHelper th = new TagHelper();
+
+            //serializers
+            var serializer = new JavaScriptSerializer();
+            var sNav = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
+
+            ViewBag.Navbar = sNav;
+            return View();
+        }
+
+        /*FUNCTIONS GET AND POST*/
 
         [HttpPost]
         public JsonResult DeleteAttach(String idAttach, String idDepto, String fileName)
@@ -102,6 +212,28 @@ namespace VTIntranetD.Controllers
 
         }
 
+        [HttpGet]
+        public JsonResult GetAreas(String idDepto)
+        {
+            var idProfile = int.Parse(Session["ProfileID"].ToString());
+            DeptoHelper dh = new DeptoHelper();
+            var serializer = new JavaScriptSerializer();
+            var serializedResult = serializer.Serialize(dh.GetAreaDepto(int.Parse(idDepto), idProfile));
+
+            return Json(serializedResult, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetDeptos(String brand)
+        {
+            var idProfile = int.Parse(Session["ProfileID"].ToString());
+            DeptoHelper dh = new DeptoHelper();
+            var serializer = new JavaScriptSerializer();
+            var serializedResult = serializer.Serialize(dh.GetDepto(brand, idProfile));
+
+            return Json(serializedResult, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public JsonResult GetNotice(String idNotice)
         {
@@ -113,23 +245,12 @@ namespace VTIntranetD.Controllers
 
         }
 
-        //[HttpGet]
-        public JsonResult GetAreas(String idDepto)
+        [HttpGet]
+        public JsonResult GetAttachArea(int idParent)
         {
-            var idProfile = int.Parse(Session["ProfileID"].ToString());
-            DeptoHelper dh = new DeptoHelper();
+            AttachmentHelper at = new AttachmentHelper();
             var serializer = new JavaScriptSerializer();
-            var serializedResult = serializer.Serialize(dh.GetAreaDepto(int.Parse(idDepto), idProfile));
-
-            return Json(serializedResult, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetDeptos(String brand)
-        {
-            var idProfile = int.Parse(Session["ProfileID"].ToString());
-            DeptoHelper dh = new DeptoHelper();
-            var serializer = new JavaScriptSerializer();
-            var serializedResult = serializer.Serialize(dh.GetDepto(brand, idProfile));
+            var serializedResult = serializer.Serialize(at.GetAttachArea(idParent));
 
             return Json(serializedResult, JsonRequestBehavior.AllowGet);
         }
@@ -140,16 +261,6 @@ namespace VTIntranetD.Controllers
             AttachmentHelper at = new AttachmentHelper();
             var serializer = new JavaScriptSerializer();
             var serializedResult = serializer.Serialize(at.GetAttachDepto(tagClabe));
-
-            return Json(serializedResult, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
-        public JsonResult GetAttachArea(int idParent)
-        {
-            AttachmentHelper at = new AttachmentHelper();
-            var serializer = new JavaScriptSerializer();
-            var serializedResult = serializer.Serialize(at.GetAttachArea(idParent));
 
             return Json(serializedResult, JsonRequestBehavior.AllowGet);
         }
@@ -350,122 +461,15 @@ namespace VTIntranetD.Controllers
 
         }
 
-        /*Seccions*/
-        public ActionResult About()
+        public String SerializerNavBar()
         {
             var idProfile = Session["ProfileID"].ToString();
-            ViewBag.UserName = this.Session["userName"];
-            //helpers models
             TagHelper th = new TagHelper();
-
-            //serializers
             var serializer = new JavaScriptSerializer();
-            var sNav = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
+            var sR = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
 
-            ViewBag.Navbar = sNav;
-
-            return View();
+            return sR;
         }
-
-        public ActionResult Contact()
-        {
-            var idProfile = Session["ProfileID"].ToString();
-            ViewBag.UserName = this.Session["userName"];
-            //helpers models
-            TagHelper th = new TagHelper();
-
-            //serializers
-            var serializer = new JavaScriptSerializer();
-            var sNav = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
-
-            ViewBag.Navbar = sNav;
-
-            return View();
-        }
-
-        public ActionResult Directory()
-        {
-            var idProfile = Session["ProfileID"].ToString();
-            ViewBag.rolName = this.Session["rolName"];
-            ViewBag.UserName = this.Session["userName"];
-            //helpers models
-            TagHelper th = new TagHelper();
-
-            //serializers
-            var serializer = new JavaScriptSerializer();
-            var sNav = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
-
-            ViewBag.Navbar = sNav;
-
-            return View();
-        }
-
-        public ActionResult Events()
-        {
-            ViewBag.UserName = this.Session["userName"];
-            ViewBag.rolName = this.Session["rolName"];
-            var idProfile = Session["ProfileID"].ToString();
-            //helpers models
-            TagHelper th = new TagHelper();
-
-            //serializers
-            var serializer = new JavaScriptSerializer();
-            var sNav = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
-            ViewBag.Navbar = sNav;
-
-            //events
-            EventHelper eh = new EventHelper();
-            ViewBag.events = eh.GetAllEvent();
-            
-
-            return View();
-        }
-
-        public ActionResult Post()
-        {
-            ViewBag.UserName = this.Session["userName"];
-            var idProfile = Session["ProfileID"].ToString();
-            //helpers models
-            TagHelper th = new TagHelper();
-
-            //serializers
-            var serializer = new JavaScriptSerializer();
-            var sNav = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
-
-            ViewBag.Navbar = sNav;
-
-            return View();
-        }
-
-        public ActionResult Talend()
-        {
-            ViewBag.UserName = this.Session["userName"];
-            var idProfile = Session["ProfileID"].ToString();
-            //helpers models
-            TagHelper th = new TagHelper();
-
-            //serializers
-            var serializer = new JavaScriptSerializer();
-            var sNav = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
-
-            ViewBag.Navbar = sNav;
-
-            return View();
-        }
-
-        public ActionResult Volunteer()
-        {
-            ViewBag.UserName = this.Session["userName"];
-            var idProfile = Session["ProfileID"].ToString();
-            //helpers models
-            TagHelper th = new TagHelper();
-
-            //serializers
-            var serializer = new JavaScriptSerializer();
-            var sNav = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
-
-            ViewBag.Navbar = sNav;
-            return View();
-        }
+        
     }
 }
