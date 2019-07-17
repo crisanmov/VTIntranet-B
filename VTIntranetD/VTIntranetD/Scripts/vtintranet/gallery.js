@@ -1,20 +1,19 @@
 ﻿$(document).ready(function () {
 
-    
     let json = JSON.parse(events.replace(/&quot;/g, '"'));
-
     createCardEvent(json);
+
 });
 
 function createCardEvent(json) {
 
-    console.log(json);
     let gallery = document.querySelector('#gallery_container');
 
     for (let i = 0; i < json.length; i++) {
-        let idAlbum = json[i].IdEvent;
 
+        let idAlbum = json[i].IdEvent;
         let divContainer = document.createElement('DIV');
+
         divContainer.style.maxWidth = '95%';
         divContainer.style.margin = '0 auto 30px';
 
@@ -32,8 +31,6 @@ function createCardEvent(json) {
 
         let promise = getPortrait(idAlbum);
         promise.then(function (value) {
-            //console.log(value);
-
             for (let i = 0; i < value.length; i++) {
                 let src = "/UploadedFiles/events/";
                 src += value[i].FileName;
@@ -67,7 +64,6 @@ function createCardEvent(json) {
         a.setAttribute('href', '/Gallery/Album?idEvent=' + json[i].IdEvent);
         a.innerHTML = 'Ver Álbum';
 
-
         divCard.append(h5);
         divCard.append(p);
         divCard.append(a);
@@ -79,7 +75,6 @@ function createCardEvent(json) {
 }
 
 async function getPortrait(idAlbum) {
-    //console.log("entra a generar portrait de album: " + idAlbum);
 
     const result = $.ajax({
         url: 'getPortrait/?idAlbum=' + idAlbum,
@@ -89,5 +84,4 @@ async function getPortrait(idAlbum) {
     });
 
     return result;
-
 }

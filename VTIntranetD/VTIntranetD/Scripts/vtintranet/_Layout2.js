@@ -15,14 +15,14 @@ jQuery(document).ready(function ($) {
     $("#container-left").css("height", contenedor);
 
     $('#uploadFile').click(function () {
-        //alert('push');
+
         $('#uploadFileModal').modal('show');
-        //console.log(brands);
         populateListTag();
 
     });
 
     $("#FormControlArea").change(function () {
+
         let selectedArea = $(this).children("option:selected").text();
         let valArea = $(this).children("option:selected").val();
         let contenedorAreas = document.createElement('div');
@@ -44,20 +44,23 @@ jQuery(document).ready(function ($) {
     });
 
     $('#FormControlTag').change(function (e) {
+
         let brand = ($(this).val());
-        //document.getElementById('FormControlDepto').innerHTML = "";
         populateListDepto(brand);
         $('.contenedor-area').remove();
         $("#FormControlDepto").children('option').not(':first').remove();
         $("#FormControlArea").children('option').not(':first').remove();
+
     });
 
     $('#FormControlDepto').change(function (e) {
+
         let idDepto = ($(this).val());
         populateListArea(idDepto);
         $('.contenedor-area').remove();
         $("#FormControlArea").children('option').not(':first').remove();
         $("#FormControlArea").children('option').removeAttr('disabled');
+
     });
 
     $(document).on('click', '.borrar-area', function () {
@@ -66,20 +69,18 @@ jQuery(document).ready(function ($) {
         $('#FormControlArea option[value="' + val1 + '"]').removeAttr('disabled');
         $(this).parent('div').remove();
         $('#FormControlArea').prop('selectedIndex', 0);
+
     });
 
     $('#btnSavePdf').click(function (e) {
 
-        //return;
         e.preventDefault();
         //validate form
 
 
         let title = $('#titlePdf').val();
         let fileClabe = title + "-" + $('#FormControlTag option:selected').attr('value');
-
         let files = $('#filePdf').prop('files');
-
         let idTag = $('#FormControlTag option:selected').attr('id');
         let idParent = $('#FormControlDepto option:selected').attr('value');
         //let fileClabe = brand_clabe + '-' + depto_clabe;
@@ -214,15 +215,11 @@ function createSubMenu(field, item) {
     submenu.appendChild(ul);
     submenu.style.display = 'none';
 
-
     return submenu;
-
 }
 
 function getTagname(tags_default) {
-    //console.log(tags_default);
-    //console.log({ Tags: tags_default });
-
+  
     $.ajax({
         url: '/Home/GetTagName/',
         type: 'GET',
@@ -232,8 +229,7 @@ function getTagname(tags_default) {
 }
 
 function populateListArea(idDepto) {
-    //console.log(idDepto);
-
+    
     $.ajax({
         url: '/Home/GetAreas/?idDepto=' + idDepto,
         dataType: 'json',
@@ -244,7 +240,6 @@ function populateListArea(idDepto) {
         cache: 'false',
         success: function (data) {
 
-            //clearSelect();
             let json = JSON.parse(data);
             let selectArea = document.querySelector('#FormControlArea');
 
@@ -263,6 +258,7 @@ function populateListArea(idDepto) {
 }
 
 function populateListDepto(brand) {
+
     $.ajax({
         url: '/Home/GetDeptos/?brand=' + brand,
         dataType: 'json',
@@ -290,7 +286,7 @@ function populateListDepto(brand) {
 }
 
 function populateListTag() {
-    //alert('populateListTag');
+    
     $.ajax({
         url: '/Home/GetTags/',
         dataType: 'json',
@@ -321,7 +317,7 @@ function populateListTag() {
 function saveManual(fd) {
 
     if (document.querySelector('#titleModalManual').textContent === 'Editar Manual') {
-        alert('Vamos a Editar');
+        alert('Entra a Editar');
 
     } else {
         $.ajax({
@@ -332,7 +328,6 @@ function saveManual(fd) {
             processData: false,
             type: 'POST',
             success: function (response) {
-                //console.log(response);
                 if (response === "successfully") {
 
                     window.location.reload();

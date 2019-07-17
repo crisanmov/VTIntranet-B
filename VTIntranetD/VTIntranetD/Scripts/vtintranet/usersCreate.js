@@ -22,7 +22,6 @@ $(document).ready(function () {
         if (btn_state === 'OFF') {
             btn_enable(btn);
             let area = btn.next()[0].innerHTML;
-            //console.log(btn[0]);
             let idTag = btn[0].value;
             let idDepto = btn.next()[0].id;
             //get Areas from Database
@@ -30,7 +29,6 @@ $(document).ready(function () {
         } else {
             btn_disable(btn);
             popDepto(btn.next()[0].innerHTML);
-            //console.log(deptos);
         }
     });
 
@@ -83,12 +81,9 @@ $(document).ready(function () {
             password: pass1
         }; 
 
-
-
         //prepare array rows databases
         let deptosD = getPermissions(deptos);
         saveUser(user, profileN, deptosD);
-
     });
 
 });
@@ -104,7 +99,6 @@ function btn_enable(btn) {
     btn.prev()[0].style.display = 'block';
 
     $('#selectAreas').modal('show')
-
 }
 
 function btn_disable(btn) {
@@ -112,23 +106,21 @@ function btn_disable(btn) {
     btn.prev()[0].style.display = 'none';
     btn.removeClass('btn_on');
     btn.parent().removeClass('enable');
-
     btn[0].innerHTML = 'OFF';
     btn.addClass('btn_off');
     btn.parent().addClass('disable');
 
     clear_modal();
-
 }
 
 function clear_modal() {
+
     $("#area_content").html("");
     $("#area").html("");
 }
 
 function drawMatTag(object_tag) {
 
-    //console.log(object_tag);
     let index = 0;
     for (let field in object_tag) {
 
@@ -143,7 +135,6 @@ function drawMatTag(object_tag) {
         let tr = document.createElement('tr');
         tr.setAttribute('id', row);
         let th = document.createElement('th');
-        //th.setAttribute('id', idTag);
         th.innerHTML = field;
         tr.append(th);
         table.append(tr);
@@ -158,7 +149,6 @@ function drawMatTag(object_tag) {
             let p = document.createElement('p');
             let add = document.createElement('i');
 
-            
             add.style.display = 'none';
             add.setAttribute('class', 'fas fa-pencil-alt add');
             td.setAttribute('class', 'disable');
@@ -167,12 +157,12 @@ function drawMatTag(object_tag) {
             btn.innerHTML = 'OFF';
             p.setAttribute('id', array[i].idDepto);
             p.innerHTML = depto;
+
             td.append(add);
             td.append(btn);
             td.append(p);
             tr_tag.append(td);
         }
-
         index++;
     }
 }
@@ -185,14 +175,16 @@ function getAreas(idTag, idDepto, area, btn) {
         dataType: 'json',
         data: { idDepto: idDepto },
         success: function (response) {
+
             const depto = new Depto(idTag, area, response);
             let index = deptos.length;
             deptos.push(depto);
             btn.prev()[0].id = index;
             let keys = Object.keys(depto.getAreas());
-      if ($('#area_content').childElementCount != 0) {
-        document.querySelector('#area_content').innerHTML = '';
-    }
+
+            if ($('#area_content').childElementCount != 0) {
+                document.querySelector('#area_content').innerHTML = '';
+            }
 
             for (let i = 0; i < keys.length; i++) {
 
@@ -200,11 +192,11 @@ function getAreas(idTag, idDepto, area, btn) {
                 setModal(tmp.IdDepto, tmp.Name, tmp.State, area, index);
             }
         }
-
     });
 }
 
-function getPermissions(deptos){
+function getPermissions(deptos) {
+
     let tags = [];
     let idTag = "";
     
@@ -233,7 +225,6 @@ function getPermissions(deptos){
             } 
         }
     }
-    
     return tags;
 }
 
@@ -245,12 +236,13 @@ function popDepto(name) {
             tmp.push(deptos[i]);
         }
     }
+
     deptos = "";
     deptos = tmp;
 }
 
 function saveUser(user, nameProfile, deptosD) {
-    console.log(deptosD);
+    
     //var token = $('input[name=__RequestVerificationToken]').val();
     //console.log(token);
   
@@ -321,12 +313,12 @@ function setModal(idDepto, name, state, area, index) {
 function setStateCheck(index, name) {
 
     let indexArea = deptos[index].getIndexArea(name);
+
     if (!deptos[index].getStateArea(indexArea)) {
         deptos[index].setStateArea(indexArea, true);
     } else {
         deptos[index].setStateArea(indexArea, false);
     }
 
-    //console.log(deptos[index]);
 }
 

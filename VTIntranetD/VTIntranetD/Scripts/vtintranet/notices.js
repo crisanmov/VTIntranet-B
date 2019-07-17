@@ -8,9 +8,7 @@
     setNoticeClick();
 
     function getNotice(idNotice) {
-        //console.log('Entra a consultar noticia');
-        //console.log(idNotice);
-
+ 
         $.ajax({
             url: 'GetNotice',
             dataType: 'json',
@@ -21,21 +19,22 @@
             processData: false,
             cache: false,
             success: function (data) {
-
-                console.log(data);
+                //console.log(data);
                 let title = data['Title'];
                 let description = data['Description'];
                 let date = data['StartDateNotice'];
                 let date2 = data['EndDateNotice'];
                 date = date.substring(0, date.length - 14);
                 date2 = date2.substring(0, date2.length - 14);
-                /*date = date.substring(6, date.length - 2);
-                date2 = date2.substring(6, date2.length - 2);
-                date = Number(date);
-                date2 = Number(date2);*/
 
-                //let startDate = new Date(date).toISOString().slice(0, 10).replace('T', ' ');
-                //let endtDate = new Date(date2).toISOString().slice(0, 10).replace('T', ' ');
+                /*don´t delete
+                    date = date.substring(6, date.length - 2);
+                    date2 = date2.substring(6, date2.length - 2);
+                    date = Number(date);
+                    date2 = Number(date2);
+                    let startDate = new Date(date).toISOString().slice(0, 10).replace('T', ' ');
+                    let endtDate = new Date(date2).toISOString().slice(0, 10).replace('T', ' ');
+                */
 
                 $('#myModal2').modal('show');
                 $('#titleNotice').text(title);
@@ -52,7 +51,6 @@
     function setEventsCalendar(json) {
 
         let noticeObj = [];
-
         //Parse Json Dates start and end notice
         for (let key in json) {
 
@@ -67,12 +65,9 @@
 
             //date2 = date2.substring(6, date2.length - 4);
             //let startDate = new Date(date).toISOString().slice(0, 10).replace('T', ' ');
-            //console.log(date);
-            //console.log(date2);
 
             json[key].StartDateNotice = date;
             json[key].EndDateNotice = date2;
-
         }
 
         //create json events for set calendar
@@ -90,25 +85,19 @@
             end = json[key].EndDateNotice;
 
             if (start == end) {
-                //console.log(title);
-                //console.log("fechas iguales");
                 str.id = id.toString();
-                //str.resourceId = 'a',
                 str.title = title;
                 str.start = start;
                 //str.url = 'http://google.com/';
                 noticeObj.push(str);
-
             } else {
                 str.id = id.toString();
                 str.title = title;
                 str.start = start;
                 str.end = end;
-
                 noticeObj.push(str);
             }
         }
-
         return noticeObj;
     }
 
@@ -132,12 +121,6 @@
                 //console.log(event.id);
                 //console.log(event.title);
             }
-
-
-
-
-
-
         });
         calendar.render();
         calendar.setOption('locale', 'es');
@@ -148,25 +131,15 @@
     }
 
     function setDialogNotice(json) {
-        //console.log('entra a setDialogNotice');
-        //console.log(json);
         let div_notices = document.querySelector('#news');
 
         for (let i = 0; i < json.length; i++) {
 
             let startDate = json[i].StartDateNotice;
-            //console.log(startDate);
             let tmp = startDate.split("-");
-            //console.log(tmp);
-
-            //let date = new Date(tmp[2], tmp[1], tmp[0]);
             let date = new Date(json[i].StartDateNotice);
-            //console.log(date);
             let months = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DEC'];
             let month = months[date.getMonth()];
-            //console.log(month);
-            //console.log(date);
-
             let div_notice = document.createElement('DIV');
             let div_date = document.createElement('DIV');
             let div_title = document.createElement('DIV');
@@ -185,12 +158,9 @@
             notice.innerHTML = json[i].Title;
 
             div_title.setAttribute('class', 'anuncios');
-
             div_title.append(notice);
             div_notice.append(div_date);
             div_notice.append(div_title);
-
-            //console.log(div_notice);
             div_notices.appendChild(div_notice);
 
         }
@@ -198,9 +168,9 @@
     }
 
     function setNoticeClick() {
-        let notices = document.querySelectorAll('.newDetails');
-        //console.log(notices);
 
+        let notices = document.querySelectorAll('.newDetails');
+        
         for (let i = 0; i < notices.length; i++) {
             $(notices[i]).click(function (e) {
                 e.preventDefault();
@@ -209,7 +179,6 @@
                 getNotice(idNew);
             });
         }
-
     }
 
 });
@@ -221,7 +190,6 @@ $('#title').on('focus', function (e) {
 $('#oneDateChecked').change(function () {
 
     if (($('#startDateNews').val() != "") || ($('#endDateNews').val() != "")) {
-        //$('#startDateNews').val('');
         $('#endDateNews').val('');
     }
 
@@ -241,7 +209,6 @@ $('#btnClose').click(function (e) {
 });
 
 $('#btnSaveNotice').click(function (e) {
-    // console.log("entra save notice");
     e.preventDefault();
 
     if ($('#msgValidate').length) {
@@ -258,28 +225,20 @@ $('#btnSaveNotice').click(function (e) {
     if ($('#oneDateChecked').is(":checked")) {
 
         validateControl(title, description, startDateNews);
-
-        //console.log("entra is checked");
-        //dateNow
         let dateNow = Date(Date.now());
-        //console.log("Today: " + dateNow.toString());
-        //dateSelect
         let startDate = $j("#startDateNews").val();
-        //console.log("day select: " + startDate);
         let dateSelect = new Date(startDate).toISOString().slice(0, 19).replace('T', ' ');
-        //console.log("day select: " + dateSelect);
 
         if (Date.parse(dateSelect) < Date.parse(dateNow)) {
-            //alert("Seleccionaste un dia no valido   ");
-            $('#validation').append("<p id='msgValidate' style='color: red; font-size: 15px'>La fecha no puede ser menor a la actual</p>");
 
+            $('#validation').append("<p id='msgValidate' style='color: red; font-size: 15px'>La fecha no puede ser menor a la actual</p>");
             return;
         }
 
-        console.log("Listo para enviar");
+        /*console.log("Listo para enviar");
         console.log("title: " + title);
         console.log("description: " + description);
-        console.log("dateSelect: " + dateSelect);
+        console.log("dateSelect: " + dateSelect);*/
 
         let notice = {
             title: title,
@@ -299,37 +258,33 @@ $('#btnSaveNotice').click(function (e) {
 
         //dateNow
         let dateNow = Date(Date.now());
-        console.log("Today: " + dateNow.toString());
+        //console.log("Today: " + dateNow.toString());
         //dateStartDate
         let startDate = $j("#startDateNews").val();
         let dateSelect1 = new Date(startDate).toISOString().slice(0, 19).replace('T', ' ');
-        console.log("day startDate: " + dateSelect1);
+        //console.log("day startDate: " + dateSelect1);
         //dateEndDate
         let endDate = $j("#endDateNews").val();
-        console.log("endDateNews: " + endDate);
+        //console.log("endDateNews: " + endDate);
         let dateSelect2 = new Date(endDate).toISOString().slice(0, 19).replace('T', ' ');
-        console.log("day endDate: " + dateSelect2);
+        //console.log("day endDate: " + dateSelect2);
         let isEvent = false;
 
         if (Date.parse(dateSelect1) < Date.parse(dateNow)) {
-            //alert("Seleccionaste un dia no valido   ");
             $('#validation').append("<p id='msgValidate' style='color: red; font-size: 15px'>La fecha inicial no puede ser menor a la actual</p>");
-
             return;
         }
 
         if ((Date.parse(dateSelect2) < Date.parse(dateSelect1)) || (Date.parse(dateSelect2) == Date.parse(dateSelect1))) {
-            //alert("Seleccionaste un dia no valido   ");
             $('#validation').append("<p id='msgValidate' style='color: red; font-size: 15px'>La fecha final no puede ser menor a la inicial</p>");
-
             return;
         }
 
-        console.log("Listo para enviar");
+        /*console.log("Listo para enviar");
         console.log("title: " + title);
         console.log("description: " + description);
         console.log("dateSelect1: " + dateSelect1);
-        console.log("dateSelect2: " + dateSelect2);
+        console.log("dateSelect2: " + dateSelect2);*/
 
         let notice = {
             title: title,
@@ -346,7 +301,6 @@ $('#btnSaveNotice').click(function (e) {
 });
 
 function validateControl(...restArgs) {
-    //console.log(restArgs.length);
     let blank = 0;
 
     for (let i = 0; i < restArgs.length; i++) {
@@ -356,14 +310,12 @@ function validateControl(...restArgs) {
 
     if (blank === 1) {
         $('#validation').append("<p id='msgValidate' style='color: red; font-size: 15px'>El formulario no debe tener campos vacios</p>");
-
         return;
     }
 }
 
 function validateBlank(...restArgs) {
     for (let i = 0; i < restArgs.length; i++) {
-        //console.log(restArgs[i].toString());
         if (restArgs[i] === '') {
             return 1;
         }
@@ -371,24 +323,19 @@ function validateBlank(...restArgs) {
 }
 
 function saveNotice(notice) {
-    console.log("entra a guardar");
-    console.log(notice);
-
-    console.log("####################");
-
+    
     $.ajax({
         url: 'SaveNotice',
         dataType: "json",
         type: "POST",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ notice: { title: notice['title'], description: notice['description'], startDateNotice: notice['startDate'], endDateNotice: notice['endDate'], fileName: notice['fileName'], path: notice['path'], isEvent: notice['isEvent'] } }),
-        //data: JSON.stringify(notice),
         async: true,
         processData: false,
         cache: false,
         success: function (data) {
             if (data === 'successfully') {
-                console.log("Noticia creada");
+                //console.log("Noticia creada");
                 $modal = $('#myModal');
                 $modal.find('form')[0].reset();
                 $('#myModal').modal('hide');
@@ -410,7 +357,6 @@ $j(function () {
 });
 
 $j("#datetimepicker1").on("dp.change", function (e) {
-
     $j("#datetimepicker1").hide();
     $j("#datetimepicker1").show();
 });
@@ -420,14 +366,11 @@ $j(function () {
         showClose: true,
         showClear: true,
         format: 'YYYY-MM-DD',
-
         tooltips: {
             selecTime: 'Selecciona la hora',
             clear: 'Limpiar Selección',
             close: 'Cerrar Ventana',
-
         }
-
     });
 });
 
@@ -436,12 +379,10 @@ $j(function () {
         showClose: true,
         showClear: true,
         format: 'YYYY-MM-DD',
-
         tooltips: {
             selecTime: 'Selecciona la hora',
             clear: 'Limpiar Selección',
             close: 'Cerrar Ventana',
-
         }
     });
 });

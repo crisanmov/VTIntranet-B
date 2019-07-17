@@ -1,5 +1,5 @@
 ﻿function getBrands(array) {
-    //console.log(array);
+    
     let brands = [];
     for (let i = 0; i < array.length; i++) {
         brands.push(array[i].TagName);
@@ -9,9 +9,9 @@
 }
 
 function findDuplicateValues(array) {
+
     let object = {};
     let result = [];
-
     //found number coincidences
     array.forEach(function (item) {
         if (!object[item])
@@ -25,6 +25,7 @@ function findDuplicateValues(array) {
             result.push(prop);
         }
     }
+
     return result;
 }
 
@@ -47,7 +48,6 @@ function getBrandDepto(brands_raw, brands) {
         object[ban] = deptos;
         deptos = [];
     }
-    //console.log('*********************************');
-    //console.log(object);
+
     return object;
 }

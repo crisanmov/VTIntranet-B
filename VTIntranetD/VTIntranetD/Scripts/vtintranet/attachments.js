@@ -12,8 +12,6 @@ function editAttachment(tagClabe, idAttachment) {
 }
 
 function deleteAttachment(idAttach, idDepto, fileName) {
-    //console.log('entra a eliminar');
-
     $.ajax({
         url: '/Home/DeleteAttach/',
         data: JSON.stringify({ "idAttach": idAttach, "idDepto": idDepto, "fileName": fileName }),
@@ -31,8 +29,6 @@ function deleteAttachment(idAttach, idDepto, fileName) {
 
 function getAttachmentsArea(idParent) {
 
-    let rolName = "@ViewBag.rolName";
-    //console.log(tagClabe);
     $.ajax({
         url: '/Home/GetAttachArea/',
         data: { idParent: idParent },
@@ -49,7 +45,6 @@ function getAttachmentsArea(idParent) {
             }
 
             let json = JSON.parse(data);
-            console.log(json);
             let table = document.querySelector('#attachments');
 
             for (let i = 0; i < json.length; i++) {
@@ -119,7 +114,6 @@ function getAttachmentsArea(idParent) {
 
 function getAttachmentsDepto(tagClabe) {
 
-    //console.log(tagClabe);
     $.ajax({
         url: '/Home/GetAttachDepto/',
         data: { tagClabe: tagClabe },
@@ -130,9 +124,7 @@ function getAttachmentsDepto(tagClabe) {
         processData: 'false',
         cache: 'false',
         success: function (data) {
-            //document.querySelector('#attachments').innerHTML = "";
             let json = JSON.parse(data);
-            console.log(json);
             let table = document.querySelector('#attachments');
 
             for (let i = 0; i < json.length; i++) {
@@ -203,25 +195,23 @@ function getUrlParam() {
     let url_string = window.location.href;
     let url = new URL(url_string);
     let tagClabe = url.searchParams.get('tag');
-    //console.log(tagClabe);
 
     return tagClabe;
 }
 
 function showArea(deptos) {
-    //console.log(deptos);
+
     for (let i = 0; i < deptos.length; i++) {
 
         let brandDeptos = document.querySelector('#brand-deptos');
         let deptoName = deptos[i].Name;
         let div = document.createElement('DIV');
+
         div.setAttribute('class', 'area');
         div.setAttribute('id', deptos[i].IdDepto);
         div.append(deptoName);
-        //console.log(div.innerHTML);
         brandDeptos.appendChild(div);
     }
-
     getAttachmentsDepto(getUrlParam());
 }
 
@@ -231,7 +221,6 @@ function setEventClickDeptos() {
 
     for (let i = 0; i<areas.length; i++) {
         $(areas[i]).click(function () {
-
             let idParent = $(this).attr('id');
             getAttachmentsArea(idParent);
         });
@@ -242,22 +231,14 @@ function setEventEditFile() {
 
     let files = document.querySelectorAll('.fileEdit');
     let span_title = document.querySelectorAll('.span_title');
-    //console.log(files);
 
     for (let i = 0; i < files.length; i++) {
         $(files[i]).click(function (e) {
-            e.preventDefault();
 
-            //alert('click');
-            let idAttachment = $(this).attr('id');
-            //console.log('idFile: ' + idAttachment + ' tag: ' + tagClabe);
-
+            e.preventDefault();           
             document.querySelector('#titleModalManual').innerHTML = 'Editar Manual';
             $('#uploadFileModal').modal('show');
             let fileName = $(span_title[i]).html();
-
-            //$('#FormControlTag option[value=' + tagClabe + ']').attr('selected', 'selected');
-
             document.querySelector('#titlePdf').setAttribute('value', fileName);
             document.querySelector('#FormControlTag').setAttribute('value', span_title[i]);
             populateListTag();
@@ -277,8 +258,8 @@ $(document).ready(function () {
     setEventClickDeptos();
 
     $('.deleteFile').click(function (e) {
-        e.preventDefault();
 
+        e.preventDefault();
         let idAttach = $(this).attr('href');
         let idDepto = $(this).attr('id');
         let fileName = $(this).attr('name');
@@ -304,7 +285,6 @@ $(document).ready(function () {
             e.preventDefault();
             let res = $(this)[0].textContent;
             if (res === "Si") {
-                //alert(idAttach + " " + tagClabe);
                 $('.cd-popup').removeClass('is-visible');
                 deleteAttachment(idAttach, idDepto, fileName);
             }
