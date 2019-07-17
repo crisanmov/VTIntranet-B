@@ -1,4 +1,5 @@
-﻿$j = jQuery.noConflict();
+﻿//tmp
+
 
 let deptos = JSON.parse(t.replace(/&quot;/g, '"'));
 let tagClabe = '';
@@ -7,14 +8,14 @@ let tagClabe = '';
 showArea(deptos);
 tagClabe = getUrlParam();
 
-$j('.attachment').attr('id', tagClabe);
+$('.attachment').attr('id', tagClabe);
 
 function editAttachment(tagClabe, idAttachment) {
     console.log(tagClabe, idAttachment);
 }
 
 function deleteAttachment(idAttach, idDepto, fileName) {
-    $j.ajax({
+    $.ajax({
         url: '/Home/DeleteAttach/',
         data: JSON.stringify({ "idAttach": idAttach, "idDepto": idDepto, "fileName": fileName }),
         dataType: 'json',
@@ -31,7 +32,7 @@ function deleteAttachment(idAttach, idDepto, fileName) {
 
 function getAttachmentsArea(idParent) {
 
-    $j.ajax({
+    $.ajax({
         url: '/Home/GetAttachArea/',
         data: { idParent: idParent },
         dataType: 'json',
@@ -116,7 +117,7 @@ function getAttachmentsArea(idParent) {
 
 function getAttachmentsDepto(tagClabe) {
 
-    $j.ajax({
+    $.ajax({
         url: '/Home/GetAttachDepto/',
         data: { tagClabe: tagClabe },
         dataType: 'json',
@@ -222,7 +223,7 @@ function setEventClickDeptos() {
     let areas = document.querySelectorAll('.area');
 
     for (let i = 0; i<areas.length; i++) {
-        $j(areas[i]).click(function () {
+        $(areas[i]).click(function () {
             let idParent = $(this).attr('id');
             getAttachmentsArea(idParent);
         });
@@ -235,11 +236,11 @@ function setEventEditFile() {
     let span_title = document.querySelectorAll('.span_title');
 
     for (let i = 0; i < files.length; i++) {
-        $j(files[i]).click(function (e) {
+        $(files[i]).click(function (e) {
 
             e.preventDefault();           
             document.querySelector('#titleModalManual').innerHTML = 'Editar Manual';
-            $j('#uploadFileModal').modal('show');
+            $('#uploadFileModal').modal('show');
             let fileName = $(span_title[i]).html();
             document.querySelector('#titlePdf').setAttribute('value', fileName);
             document.querySelector('#FormControlTag').setAttribute('value', span_title[i]);
@@ -250,8 +251,9 @@ function setEventEditFile() {
 }
 
 $(document).ready(function () {
-
-    $j('body').find('*').each(function() {
+    document.querySelector('#chat').style.display = "none";
+    //document.querySelector('#chat').style.display = "none";
+    $('body').find('*').each(function() {
         var html= $(this).html().replace(/&amp;/g, "&");
         $(this).html(html);
     });
@@ -259,17 +261,17 @@ $(document).ready(function () {
     setEventEditFile();
     setEventClickDeptos();
 
-    $j('.deleteFile').click(function (e) {
+    $('.deleteFile').click(function (e) {
 
         e.preventDefault();
         let idAttach = $(this).attr('href');
         let idDepto = $(this).attr('id');
         let fileName = $(this).attr('name');
         //alert("Borrar File: " + idAttach + idDepto);
-        $j('.cd-popup').addClass('is-visible');
+        $('.cd-popup').addClass('is-visible');
 
         //close popup
-        $j('.cd-popup').on('click', function (event) {
+        $('.cd-popup').on('click', function (event) {
             if ($(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup')) {
                 event.preventDefault();
                 $(this).removeClass('is-visible');
@@ -277,13 +279,13 @@ $(document).ready(function () {
         });
 
         //close popup when clicking the esc keyboard button
-        $j(document).keyup(function (event) {
+        $(document).keyup(function (event) {
             if (event.which == '27') {
                 $('.cd-popup').removeClass('is-visible');
             }
         });
 
-        $j('.del').click(function (e) {
+        $('.del').click(function (e) {
             e.preventDefault();
             let res = $(this)[0].textContent;
             if (res === "Si") {

@@ -5,6 +5,7 @@ var tagObject = {};
 var brand = [];
 //Array for save states to each modal areas
 var deptos = [];
+var stateAreaChecks = 0;
 
 brand = getBrands(jsonTags);
 brand = findDuplicateValues(brand);
@@ -315,15 +316,16 @@ function setStateCheck(index, name) {
 
     if (!deptos[index].getStateArea(indexArea)) {
         deptos[index].setStateArea(indexArea, true);
+        stateAreaChecks = 1;
     } else {
         deptos[index].setStateArea(indexArea, false);
+        stateAreaChecks = 0;
     }
 
 }
 
 function validateForm(user, profileN, rolName) {
 
-    
     let res1 = validateBlankSpaces(user);
     let res2 = validatePass(user);
     let res3;
@@ -337,7 +339,12 @@ function validateForm(user, profileN, rolName) {
     if ((res1 && res2) && res3) { 
         //prepare array rows databases
         let deptosD = getPermissions(deptos);
-        saveUser(user, profileN, deptosD, rolName);
+
+        if (deptosD != "" && stateAreaChecks != 0) {
+            saveUser(user, profileN, deptosD, rolName);
+        } else {
+            alert("ERROR AL ENVIAR EL FORMULARIO");
+        }  
     } else {
         alert("ERROR AL ENVIAR EL FORMULARIO");
     }

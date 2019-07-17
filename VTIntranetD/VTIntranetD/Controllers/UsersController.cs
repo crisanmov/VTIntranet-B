@@ -59,7 +59,7 @@ namespace VTIntranetD.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public ActionResult Create(User user, String nameProfile, List<Depto> deptosD)
+        public ActionResult Create(User user, String nameProfile, List<Depto> deptosD, String rolName)
         {
             if (ModelState.IsValid)
             {
@@ -73,6 +73,7 @@ namespace VTIntranetD.Controllers
 
                 Profile p = new Profile {
                     name = nameProfile,
+                    rolName = rolName,
                     profileActive = user.userActive.Equals("1"),
                     idUser = idUser,
                 };

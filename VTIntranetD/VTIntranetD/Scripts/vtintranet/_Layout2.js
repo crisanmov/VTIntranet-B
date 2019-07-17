@@ -77,7 +77,7 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
         //validate form
 
-
+ 
         let title = $('#titlePdf').val();
         let fileClabe = title + "-" + $('#FormControlTag option:selected').attr('value');
         let files = $('#filePdf').prop('files');
@@ -107,12 +107,9 @@ jQuery(document).ready(function ($) {
         }
     });
 
-
-
 });
 
 function createMenu(menuInfo) {
-
 
     //console.log(menuInfo);
     let nav_home = document.querySelector('#nav_home');
@@ -143,7 +140,9 @@ function createMenu(menuInfo) {
         //console.log(tags_default);
         //console.log(menuInfo);
 
-        let result = getTagname(tags_default);
+
+        //GET TAGS FOR CONSULT
+        //let result = getTagname(tags_default);
         //console.log(result);
 
         for (field in menuInfo) {
@@ -321,7 +320,7 @@ function saveManual(fd) {
 
     } else {
         $.ajax({
-            url: "SaveFilePdf",
+            url: "/Home/SaveFilePdf/",
             data: fd,
             cache: false,
             contentType: false,

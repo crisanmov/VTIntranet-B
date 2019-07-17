@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.IO;
+using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
-using VTIntranetD.Models.Helpers;
 using VTIntranetD.Models.Dto;
-using System.Text;
+using VTIntranetD.Models.Helpers;
 
 namespace VTIntranetD.Controllers
 {
@@ -57,6 +56,7 @@ namespace VTIntranetD.Controllers
         public ActionResult About()
         {
             ViewBag.UserName = this.Session["userName"];
+            ViewBag.rolName = this.Session["rolName"];
             ViewBag.Navbar = SerializerNavBar();
 
             return View();
@@ -94,14 +94,24 @@ namespace VTIntranetD.Controllers
         public ActionResult Post()
         {
             ViewBag.UserName = this.Session["userName"];
+            ViewBag.rolName = this.Session["rolName"];
             ViewBag.Navbar = SerializerNavBar();
 
+            return View();
+        }
+
+        public ActionResult Profile()
+        {
+            ViewBag.UserName = this.Session["userName"];
+            ViewBag.rolName = this.Session["rolName"];
+            ViewBag.Navbar = SerializerNavBar();
             return View();
         }
 
         public ActionResult Talend()
         {
             ViewBag.UserName = this.Session["userName"];
+            ViewBag.rolName = this.Session["rolName"];
             ViewBag.Navbar = SerializerNavBar();
 
             return View();
@@ -110,6 +120,7 @@ namespace VTIntranetD.Controllers
         public ActionResult Volunteer()
         {
             ViewBag.UserName = this.Session["userName"];
+            ViewBag.rolName = this.Session["rolName"];
             ViewBag.Navbar = SerializerNavBar();
             return View();
         }
