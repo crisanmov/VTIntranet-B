@@ -488,3 +488,9 @@ i.fas.fa-user-plus {
     margin-left: 10px;
     color: #fff;
 }
+.maximizar{
+    display:none
+}
+.box-tools i {
+    color: #131313;
+}

@@ -457,8 +457,12 @@
 
                     if (userId != id) {
                         var ctrId = 'private_' + id;
+                        $('#' + ctrId).css("display","block");
+                    }
+                    if($("#"+ctrId).length == 0) {
                         OpenPrivateChatBox(chatHub, id, ctrId, name);
-
+                        
+                        console.log(ctrId);
                     }
 
                 });
@@ -535,6 +539,9 @@
                 ' <button class="minimizar" type="button" class="btn btn-box-tool" data-widget="collapse">' +
                 '    <i class="fa fa-minus"></i>' +
                 '  </button>' +
+                ' <button class="maximizar" type="button" class="btn btn-box-tool" data-widget="collapse">' +
+                '    <i class="fas fa-window-maximize"></i>' +
+                '  </button>' +
                 '  <button class="imgDelete" type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button></div></div>' +
                 ' <div class="box-body">' +
                 ' <div id="divMessage" class="direct-chat-messages">' +
@@ -563,8 +570,21 @@
 
                 // Closing Private Chat Box
             $div.find('.minimizar').click(function () {
-                $('#' + ctrId).css("display","none");
+                $('#' + ctrId).children(".box-header").css("display", "flex");
+                $('#' + ctrId).children(".box-header").css("padding", "0");
+                $('#' + ctrId).children(".box-header").children("h3").css("margin", "5px");
+                $('#' + ctrId).children(".box-body, .box-footer").css("display", "none");
+                $('#' + ctrId).children(".box-header").children(".box-tools").children(".maximizar").css("display", "inline-block");
+                $(this).css("display", "none");
             });
+            $div.find('.maximizar').click(function () {
+                $('#' + ctrId).children(".box-header").css("display", "block");
+                $('#' + ctrId).children(".box-header").css("padding", "10px");
+                $('#' + ctrId).children(".box-header").children("h3").css("margin", "20x 0");
+                $('#' + ctrId).children(".box-body, .box-footer").css("display", "block");
+                $('#' + ctrId).children(".box-header").children(".box-tools").children(".minimizar").css("display", "inline-block");
+                $(this).css("display", "none");
+             });
 
             // Send Button event in Private Chat
             $div.find("#btnSendMessage").click(function () {
