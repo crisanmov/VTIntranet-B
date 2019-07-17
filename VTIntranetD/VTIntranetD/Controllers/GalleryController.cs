@@ -13,23 +13,14 @@ namespace VTIntranetD.Controllers
         // GET: Gallery
         public ActionResult Index()
         {
-            var idProfile = Session["ProfileID"].ToString();
-            ViewBag.UserName = this.Session["userName"];
-            ViewBag.rolName = this.Session["rolName"];
-            //helpers models
-            TagHelper th = new TagHelper();
-
-            //serializers
-            var serializer = new JavaScriptSerializer();
-            var sNav = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
-            ViewBag.Navbar = sNav;
-
-            //get all events
             EventHelper eh = new EventHelper();
             var serializerEvent = new JavaScriptSerializer();
             var serializedResultE = serializerEvent.Serialize(eh.GetAllEvent());
 
             ViewBag.events = serializedResultE;
+            ViewBag.UserName = this.Session["userName"];
+            ViewBag.rolName = this.Session["rolName"];
+            ViewBag.Navbar = SerializerNavBar();
 
             return View();
         }
@@ -38,26 +29,14 @@ namespace VTIntranetD.Controllers
         [HttpGet]
         public ActionResult Album(int idEvent)
         {
-            var idProfile = Session["ProfileID"].ToString();
-            //helpers models
-            TagHelper th = new TagHelper();
-
-            //serializers
-            var serializer = new JavaScriptSerializer();
-            var sNav = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
-            ViewBag.Navbar = sNav;
-
-            //get all events
             EventHelper eh = new EventHelper();
-            ViewBag.events = eh.GetAllEvent();
-
-            //get images for idEvent
             MultimediaHelper mh = new MultimediaHelper();
-            //ViewBag.images = mh.getImages(idEvent);
-
-
+            var serializer = new JavaScriptSerializer();
             var serializedResult = serializer.Serialize(mh.GetImages(idEvent));
+
             ViewBag.images = serializedResult;
+            ViewBag.events = eh.GetAllEvent();
+            ViewBag.Navbar = SerializerNavBar();
 
             return View();
         }
@@ -65,14 +44,20 @@ namespace VTIntranetD.Controllers
         [HttpGet]
         public JsonResult getPortrait(String idAlbum)
         {
-            //System.Diagnostics.Debug.WriteLine("#");
-            int id = Int32.Parse(idAlbum);
-
             MultimediaHelper mh = new MultimediaHelper();
-            var Portrait = mh.GetAlbumPortriat(id);
+            var Portrait = mh.GetAlbumPortriat(Int32.Parse(idAlbum));
 
             return Json(Portrait, JsonRequestBehavior.AllowGet);
-      
+        }
+
+        private String SerializerNavBar()
+        {
+            var idProfile = Session["ProfileID"].ToString();
+            TagHelper th = new TagHelper();
+            var serializer = new JavaScriptSerializer();
+            var sR = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
+
+            return sR;
         }
     }
 }

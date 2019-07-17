@@ -24,20 +24,8 @@ namespace VTIntranetD.Controllers
         // GET: Users
         public ActionResult Index()
         {
-            
-            var idProfile = Session["ProfileID"].ToString();
-            //helpers models
-            TagHelper th = new TagHelper();
-
-            //serializers
-            var serializer = new JavaScriptSerializer();
-            var sNav = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
-
-            ViewBag.Navbar = sNav;
-
+            ViewBag.Navbar = SerializerNavBar();
             return View(db.User.ToList());
-            
-            
         }
 
         // GET: Users/Details/5
@@ -58,12 +46,7 @@ namespace VTIntranetD.Controllers
         // GET: Users/Create
         public ActionResult Create()
         {
-            var idProfile = Session["ProfileID"].ToString();
-            TagHelper th = new TagHelper();
-
-            var serializer = new JavaScriptSerializer();
-            var sR = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
-            ViewBag.Navbar = sR;
+            ViewBag.Navbar = SerializerNavBar();
             return View();
         }
 
@@ -187,7 +170,6 @@ namespace VTIntranetD.Controllers
         public JsonResult GetAreas(String idDepto)
         {
             DeptoHelper dh = new DeptoHelper();
-
             var Areas = dh.GetArea(int.Parse(idDepto), Convert.ToInt32(Session["ProfileID"]));
 
             return Json(Areas, JsonRequestBehavior.AllowGet);
@@ -206,6 +188,16 @@ namespace VTIntranetD.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private String SerializerNavBar()
+        {
+            var idProfile = Session["ProfileID"].ToString();
+            TagHelper th = new TagHelper();
+            var serializer = new JavaScriptSerializer();
+            var sR = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));
+
+            return sR;
         }
     }
 }
