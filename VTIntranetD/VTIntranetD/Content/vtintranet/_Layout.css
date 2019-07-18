@@ -494,3 +494,6 @@ i.fas.fa-user-plus {
 .box-tools i {
     color: #131313;
 }
+#nav_home2 li:last-child:hover {
+    border: none;
+}
