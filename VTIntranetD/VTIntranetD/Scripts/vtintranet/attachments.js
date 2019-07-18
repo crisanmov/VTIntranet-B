@@ -53,6 +53,7 @@ function getAttachmentsArea(idParent) {
             for (let i = 0; i < json.length; i++) {
 
                 let tr = document.createElement('TR');
+                tr.setAttribute('class', 'tr_control');
                 let td_id = document.createElement('TD');
                 let td_file = document.createElement('TD');
                 let td_tag = document.createElement('TD');
@@ -95,7 +96,7 @@ function getAttachmentsArea(idParent) {
                 td_show.appendChild(a_show);
                 //td_edit.appendChild(a_edit);
                 //td_edit.append(span_edit);
-                td_del.appendChild(a_del);
+                
                 td_del.append(span_del);
 
                 tr.append(td_id);
@@ -103,7 +104,10 @@ function getAttachmentsArea(idParent) {
                 tr.append(td_tag);
                 tr.append(td_show);
                 //tr.append(td_edit);
-                tr.append(td_del);
+                if (rolName == "admin") {
+                    td_del.appendChild(a_del);
+                    tr.append(td_del);
+                }
 
                 table.append(tr);
 
@@ -133,12 +137,14 @@ function getAttachmentsDepto(tagClabe) {
             for (let i = 0; i < json.length; i++) {
 
                 let tr = document.createElement('TR');
+                tr.setAttribute('class', 'tr_control');
                 let td_id = document.createElement('TD');
                 let td_file = document.createElement('TD');
                 let td_tag = document.createElement('TD');
                 let td_show = document.createElement('TD');
                 //let td_edit = document.createElement('TD');
                 let td_del = document.createElement('TD');
+                td_del.setAttribute('class', 'td_del');
                 let a_show = document.createElement('a');
                 //let a_edit = document.createElement('a');
                 let a_del = document.createElement('a');
@@ -175,7 +181,8 @@ function getAttachmentsDepto(tagClabe) {
                 td_show.appendChild(a_show);
                 //td_edit.appendChild(a_edit);
                 //td_edit.append(span_edit);
-                td_del.appendChild(a_del);
+
+                
                 td_del.append(span_del);
 
                 tr.append(td_id);
@@ -183,7 +190,12 @@ function getAttachmentsDepto(tagClabe) {
                 tr.append(td_tag);
                 tr.append(td_show);
                 //tr.append(td_edit);
-                tr.append(td_del);
+
+                if (rolName == "admin") {
+                    td_del.appendChild(a_del);
+                    tr.append(td_del);
+                }
+                
                 table.append(tr);
             }
         },
@@ -224,6 +236,12 @@ function setEventClickDeptos() {
 
     for (let i = 0; i<areas.length; i++) {
         $(areas[i]).click(function () {
+
+            if ($('#attachments').childElementCount != 0) {
+                //alert("entra");
+                document.querySelector('#attachments').innerHTML = '';
+            }
+
             let idParent = $(this).attr('id');
             getAttachmentsArea(idParent);
         });
@@ -251,8 +269,9 @@ function setEventEditFile() {
 }
 
 $(document).ready(function () {
+
     document.querySelector('#chat').style.display = "none";
-    //document.querySelector('#chat').style.display = "none";
+    
     $('body').find('*').each(function() {
         var html= $(this).html().replace(/&amp;/g, "&");
         $(this).html(html);
@@ -296,4 +315,6 @@ $(document).ready(function () {
     });
 
 });
+
+
 

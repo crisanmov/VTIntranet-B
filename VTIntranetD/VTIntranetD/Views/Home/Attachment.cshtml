@@ -116,12 +116,15 @@
             <!--<th>Editar</th>-->
             @if (ViewBag.rolName == "admin")
             {
-                <!--<th>Eliminar</th>-->
+                <th>Eliminar</th>
             }
         </tr>
     </table>
 </div>
-<script>let t = "@ViewBag.D";</script>
+<script>
+    let t = "@ViewBag.D";
+    let rolName = "@ViewBag.rolName";
+</script>
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script src='~/Scripts/vtintranet/attachments.js'></script>
 

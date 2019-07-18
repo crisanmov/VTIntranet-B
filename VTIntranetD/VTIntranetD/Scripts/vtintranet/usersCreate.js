@@ -13,6 +13,7 @@ tagObject = getBrandDepto(jsonTags, brand);
 //draw matrix
 drawMatTag(tagObject);
 
+
 $(document).ready(function () {
 
     $('.btn_control').on('click', function (e) {
@@ -86,7 +87,6 @@ $(document).ready(function () {
 
 });
 
-
 function btn_enable(btn) {
 
     btn.removeClass('btn_off');
@@ -118,7 +118,7 @@ function clear_modal() {
 }
 
 function drawMatTag(object_tag) {
-
+    console.log(object_tag);
     let index = 0;
     for (let field in object_tag) {
 
@@ -253,7 +253,7 @@ function saveUser(user, nameProfile, deptosD, rolName) {
         success: function (response) {
             alert("El Usuario se ha generado correctamente");
             $('#__AjaxAntiForgeryForm')[0].reset();
-            //console.log(response);
+            window.location.reload();
         },
         error: function (e) {
 
@@ -335,6 +335,11 @@ function validateForm(user, profileN, rolName) {
     } else {
         res3 = false;
     }
+
+    if (profileN == "seleccion" || rolName == "seleccion") {
+        alert("Falta un campo de SELECCIONAR");
+        return false;
+    }
     
     if ((res1 && res2) && res3) { 
         //prepare array rows databases
@@ -343,7 +348,7 @@ function validateForm(user, profileN, rolName) {
         if (deptosD != "" && stateAreaChecks != 0) {
             saveUser(user, profileN, deptosD, rolName);
         } else {
-            alert("ERROR AL ENVIAR EL FORMULARIO");
+            alert("Debes habilitar al menos un material de acceso.");
         }  
     } else {
         alert("ERROR AL ENVIAR EL FORMULARIO");
@@ -368,11 +373,6 @@ function validateBlankSpaces(user) {
             alert("El Formulario NO debe contener campos vacios.");
             return false;
         } 
-
-        if (user[field] == "seleccion") {
-            alert("Falta un campo de SELECCIONAR");
-            return false;
-        }
     }
 
     return true;
