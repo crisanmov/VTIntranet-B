@@ -55,6 +55,7 @@ table {
     table-layout: auto;
     width: 100%;
     text-align: center;
+    table-layout: fixed;
 }
 
 tbody {
