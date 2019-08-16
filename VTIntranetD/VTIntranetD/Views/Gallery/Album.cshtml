@@ -270,7 +270,7 @@
     <h2>@ViewBag.Title</h2>
     <hr />
     <!--Images gallery-->
-    @if (ViewBag.rolName == "admin")
+    @if (ViewBag.rolName != "admin")
     {
         <div style="width:95%; margin:0 auto"><button id="del-img" class="btn btn-primary">Seleccionar imagenes</button><button id="deletear" class="btn btn-primary" style="margin-left:1%">Eliminar imagenes</button></div>
     }

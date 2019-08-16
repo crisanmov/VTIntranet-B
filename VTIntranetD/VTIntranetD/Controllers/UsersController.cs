@@ -19,17 +19,22 @@ namespace VTIntranetD.Controllers
 {
     public class UsersController : Controller
     {
+        private SessionModel model;
         private UserDataModel db = new UserDataModel();
 
+        [SessionTimeOut]
         // GET: Users
         public ActionResult Index()
         {
-            ViewBag.rolName = this.Session["rolName"];
-            ViewBag.UserName = this.Session["userName"];
-            ViewBag.Navbar = SerializerNavBar();
+            model = (SessionModel)this.Session["SessionData"];
+
+            ViewBag.rolName = model.RolName;
+            ViewBag.UserName = model.UserName;
+            ViewBag.Navbar = SerializerNavBar(model.ProfileID);
             return View(db.User.ToList());
         }
 
+        [SessionTimeOut]
         // GET: Users/Details/5
         public ActionResult Details(int? id)
         {
@@ -45,18 +50,22 @@ namespace VTIntranetD.Controllers
             return View(user);
         }
 
+        [SessionTimeOut]
         // GET: Users/Create
         public ActionResult Create()
         {
-            ViewBag.rolName = this.Session["rolName"];
-            ViewBag.UserName = this.Session["userName"];
-            ViewBag.Navbar = SerializerNavBar();
+            model = (SessionModel)this.Session["SessionData"];
+
+            ViewBag.rolName = model.RolName;
+            ViewBag.UserName = model.UserName;
+            ViewBag.Navbar = SerializerNavBar(model.ProfileID);
             return View();
         }
 
         // POST: Users/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
+        [SessionTimeOut]
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public ActionResult Create(User user, String nameProfile, List<Depto> deptosD, String rolName)
@@ -105,6 +114,7 @@ namespace VTIntranetD.Controllers
             }
         }
 
+        [SessionTimeOut]
         // GET: Users/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -123,6 +133,7 @@ namespace VTIntranetD.Controllers
         // POST: Users/Edit/5
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
+        [SessionTimeOut]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "idUser,username,password,name,lastNameP,lastNameM,userActive,skype")] User user)
@@ -136,6 +147,7 @@ namespace VTIntranetD.Controllers
             return View(user);
         }
 
+        [SessionTimeOut]
         // GET: Users/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -152,6 +164,7 @@ namespace VTIntranetD.Controllers
         }
 
         // POST: Users/Delete/5
+        [SessionTimeOut]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -171,11 +184,14 @@ namespace VTIntranetD.Controllers
             return RedirectToAction("Index");
         }
 
+        [SessionTimeOut]
         [HttpGet]
         public JsonResult GetAreas(String idDepto)
         {
+            model = (SessionModel)this.Session["SessionData"];
+
             DeptoHelper dh = new DeptoHelper();
-            var Areas = dh.GetArea(int.Parse(idDepto), Convert.ToInt32(Session["ProfileID"]));
+            var Areas = dh.GetArea(int.Parse(idDepto), Convert.ToInt32(model.ProfileID));
 
             return Json(Areas, JsonRequestBehavior.AllowGet);
         }
@@ -195,9 +211,8 @@ namespace VTIntranetD.Controllers
             base.Dispose(disposing);
         }
 
-        private String SerializerNavBar()
+        private String SerializerNavBar(string idProfile)
         {
-            var idProfile = Session["ProfileID"].ToString();
             TagHelper th = new TagHelper();
             var serializer = new JavaScriptSerializer();
             var sR = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));

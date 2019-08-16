@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Security;
 using VTIntranetD.Models.Entities;
+using VTIntranetD.Models.Dto;
+
+
+using Microsoft.Owin.Security.Cookies;
 
 namespace VTIntranetD.Controllers
 {
@@ -36,10 +41,22 @@ namespace VTIntranetD.Controllers
                         if (obj != null && validatePass)
                         {
                             var profile = db.Profile.Where(p => p.idUser.Equals(obj.idUser)).FirstOrDefault();
-                            Session["UserID"] = obj.idUser.ToString();
+                            /*Session["UserID"] = obj.idUser.ToString();
                             Session["UserName"] = obj.username.ToString();
                             Session["ProfileID"] = profile.idProfile.ToString();
-                            Session["rolName"] = profile.rolName.ToString();
+                            Session["rolName"] = profile.rolName.ToString();*/
+
+                            SessionModel sm = new SessionModel()
+                            {
+                                UserID = obj.idUser.ToString(),
+                                UserName = obj.username.ToString(),
+                                ProfileID = profile.idProfile.ToString(),
+                                RolName = profile.rolName.ToString(),
+                                UserActive = true
+                            };
+
+                            Session["SessionData"] = sm;
+                       
                             return RedirectToAction("Index", "Home");
                         }
                     }
@@ -56,6 +73,7 @@ namespace VTIntranetD.Controllers
 
         public ActionResult LogOut()
         {
+            Session.Clear();
             FormsAuthentication.SignOut();
             return RedirectToAction("Index", "Login");
         }
