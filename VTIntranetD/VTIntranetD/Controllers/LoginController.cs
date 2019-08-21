@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using VTIntranetD.Models.Entities;
 using VTIntranetD.Models.Dto;
+using NLog;
 
 
 using Microsoft.Owin.Security.Cookies;
@@ -16,6 +17,8 @@ namespace VTIntranetD.Controllers
 {
     public class LoginController : Controller
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         // GET: Login
         public ActionResult Index()
         {
@@ -56,7 +59,13 @@ namespace VTIntranetD.Controllers
                             };
 
                             Session["SessionData"] = sm;
-                       
+
+                            //Write in Log
+                            LogManager.Configuration.Variables["userid"] = sm.UserID;
+                            LogManager.Configuration.Variables["username"] = sm.UserName;
+                            logger.Info("Initialize Session VTIntranet with username: " + sm.UserName + Environment.NewLine + DateTime.Now);
+
+
                             return RedirectToAction("Index", "Home");
                         }
                     }
