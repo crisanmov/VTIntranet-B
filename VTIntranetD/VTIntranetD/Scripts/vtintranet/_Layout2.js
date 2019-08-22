@@ -1,4 +1,11 @@
-﻿let json = JSON.parse(array.replace(/&quot;/g, '"'));
+﻿if (array === "null") {
+    //console.log("No se puede cargar Menu Principal");
+    //alert("No se puede cargar Menu Principal"); 
+    document.querySelector('#mValidate').style.display = "flex";
+    //return;
+}
+
+let json = JSON.parse(array.replace(/&quot;/g, '"'));
 let menuInfo = {};
 let brands = [];
 
@@ -15,10 +22,8 @@ jQuery(document).ready(function ($) {
     $("#container-left").css("height", contenedor);
 
     $('#uploadFile').click(function () {
-
-        $('#uploadFileModal').modal('show');
+        $("#FormControlTag").children('option').not(':first').remove();
         populateListTag();
-
     });
 
     $("#FormControlArea").change(function () {
@@ -54,7 +59,7 @@ jQuery(document).ready(function ($) {
     });
 
     $('#FormControlDepto').change(function (e) {
-
+        
         let idDepto = ($(this).val());
         populateListArea(idDepto);
         $('.contenedor-area').remove();
@@ -237,17 +242,27 @@ function populateListArea(idDepto) {
         asyn: 'true',
         processData: 'false',
         cache: 'false',
-        success: function (data) {
+        success: function (response) {
 
-            let json = JSON.parse(data);
-            let selectArea = document.querySelector('#FormControlArea');
+            if (response.success) {
+                let json = JSON.parse(response.data);
+                let selectArea = document.querySelector('#FormControlArea');
 
-            for (let i = 0; i < json.length; i++) {
-                let option = document.createElement('option');
-                option.innerHTML = json[i].Name;
-                option.setAttribute('value', json[i].Id);
-                selectArea.append(option);
+                for (let i = 0; i < json.length; i++) {
+                    let option = document.createElement('option');
+                    option.innerHTML = json[i].Name;
+                    option.setAttribute('value', json[i].Id);
+                    selectArea.append(option);
+                }
+            } else {
+                alert(response.msgError);
+                $('#uploadFileModal').modal('hide');
+                $modal = $('#uploadFileModal');
+                $modal.find('form')[0].reset();
+                $('#files').val('');
+                $('#list').empty();
             }
+            
         },
         error: function (e) {
 
@@ -266,17 +281,29 @@ function populateListDepto(brand) {
         asyn: 'true',
         processData: 'false',
         cache: 'false',
-        success: function (data) {
-            //clearSelect();
-            let json = JSON.parse(data);
-            let selectDepto = document.querySelector('#FormControlDepto');
+        success: function (response) {
 
-            for (let i = 0; i < json.length; i++) {
-                let option = document.createElement('option');
-                option.innerHTML = json[i].Name;
-                option.setAttribute('value', json[i].IdDepto);
-                selectDepto.append(option);
+            if (response.success) {
+
+                let json = JSON.parse(response.data);
+                let selectDepto = document.querySelector('#FormControlDepto');
+
+                for (let i = 0; i < json.length; i++) {
+                    let option = document.createElement('option');
+                    option.innerHTML = json[i].Name;
+                    option.setAttribute('value', json[i].IdDepto);
+                    selectDepto.append(option);
+                }
+
+            } else {
+                alert(response.msgError);
+                $('#uploadFileModal').modal('hide');
+                $modal = $('#uploadFileModal');
+                $modal.find('form')[0].reset();
+                $('#files').val('');
+                $('#list').empty();
             }
+            
         },
         error: function (e) {
 
@@ -285,7 +312,9 @@ function populateListDepto(brand) {
 }
 
 function populateListTag() {
+
     
+
     $.ajax({
         url: '/Home/GetTags/',
         dataType: 'json',
@@ -294,16 +323,26 @@ function populateListTag() {
         asyn: 'true',
         processData: 'false',
         cache: 'false',
-        success: function (data) {
-            let json = JSON.parse(data);
-            let selectTag = document.querySelector('#FormControlTag');
+        success: function (response) {
+            if (response.success) {
+                //console.log(response);
+                let json = JSON.parse(response.data);
+                let selectTag = document.querySelector('#FormControlTag');
 
-            for (let i = 0; i < json.length; i++) {
-                let option = document.createElement('option');
-                option.innerHTML = json[i].tagName;
-                option.setAttribute('value', json[i].clabe);
-                option.setAttribute('id', json[i].idTag);
-                selectTag.append(option);
+                //selectTag.innerHTML = "";
+
+                for (let i = 0; i < json.length; i++) {
+                    let option = document.createElement('option');
+                    option.innerHTML = json[i].tagName;
+                    option.setAttribute('value', json[i].clabe);
+                    option.setAttribute('id', json[i].idTag);
+                    selectTag.append(option);
+                }
+
+                $('#uploadFileModal').modal('show');
+            } else {
+                alert(response.msgError);
+                return;
             }
         },
         error: function (e) {
@@ -319,6 +358,8 @@ function saveManual(fd) {
         alert('Entra a Editar');
 
     } else {
+        alert("1");
+        
         $.ajax({
             url: "/Home/SaveFilePdf/",
             data: fd,

@@ -1,5 +1,10 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
 
+    if (notices == "null") {
+        alert("No se pudieron cargar las noticias correctamente");
+        //return;
+    }
+
     let json = JSON.parse(notices.replace(/&quot;/g, '"'));
     let events = setEventsCalendar(json);
 
@@ -8,9 +13,9 @@
     setNoticeClick();
 
     function getNotice(idNotice) {
- 
+
         $.ajax({
-            url: 'GetNotice',
+            url: '/Home/GetNotice',
             dataType: 'json',
             data: JSON.stringify({ idNotice: idNotice }),
             type: 'POST',
@@ -18,32 +23,37 @@
             async: true,
             processData: false,
             cache: false,
-            success: function (data) {
-                //console.log(data);
-                let title = data['Title'];
-                let description = data['Description'];
-                let date = data['StartDateNotice'];
-                let date2 = data['EndDateNotice'];
-                date = date.substring(0, date.length - 14);
-                date2 = date2.substring(0, date2.length - 14);
+            success: function (response) {
 
-                /*don´t delete
-                    date = date.substring(6, date.length - 2);
-                    date2 = date2.substring(6, date2.length - 2);
-                    date = Number(date);
-                    date2 = Number(date2);
-                    let startDate = new Date(date).toISOString().slice(0, 10).replace('T', ' ');
-                    let endtDate = new Date(date2).toISOString().slice(0, 10).replace('T', ' ');
-                */
+                if (response.success) {
 
-                $('#myModal2').modal('show');
-                $('#titleNotice').text(title);
-                $('#descriptionNotice').text(description);
-                $('#startNotice').text(date);
-                $('#endNotice').text(date2);
+                    let title = response.data['Title'];
+                    let description = response.data['Description'];
+                    let date = response.data['StartDateNotice'];
+                    let date2 = response.data['EndDateNotice'];
+                    date = date.substring(0, date.length - 14);
+                    date2 = date2.substring(0, date2.length - 14);
+
+                    /*don´t delete
+                        date = date.substring(6, date.length - 2);
+                        date2 = date2.substring(6, date2.length - 2);
+                        date = Number(date);
+                        date2 = Number(date2);
+                        let startDate = new Date(date).toISOString().slice(0, 10).replace('T', ' ');
+                        let endtDate = new Date(date2).toISOString().slice(0, 10).replace('T', ' ');
+                    */
+
+                    $('#myModal2').modal('show');
+                    $('#titleNotice').text(title);
+                    $('#descriptionNotice').text(description);
+                    $('#startNotice').text(date);
+                    $('#endNotice').text(date2);
+                } else {
+                    alert(response.error);
+                }
             },
             error: function (e) {
-                //console.log(e);
+                console.log(e);
             }
         });
     }
@@ -325,27 +335,29 @@ function validateBlank(...restArgs) {
 function saveNotice(notice) {
     
     $.ajax({
-        url: 'SaveNotice',
-        dataType: "json",
-        type: "POST",
-        contentType: 'application/json; charset=utf-8',
+        url: '/Home/SaveNotice',
         data: JSON.stringify({ notice: { title: notice['title'], description: notice['description'], startDateNotice: notice['startDate'], endDateNotice: notice['endDate'], fileName: notice['fileName'], path: notice['path'], isEvent: notice['isEvent'] } }),
-        async: true,
-        processData: false,
-        cache: false,
+        dataType: 'json',
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
         success: function (data) {
-            if (data === 'successfully') {
-                //console.log("Noticia creada");
+            console.log(data);
+            if (data.success) {
                 $modal = $('#myModal');
                 $modal.find('form')[0].reset();
                 $('#myModal').modal('hide');
                 location.reload();
+            } else {
+                $modal = $('#myModal');
+                $modal.find('form')[0].reset();
+                $('#myModal').modal('hide');
+                alert(data.msg);
             }
         },
-        error: function (xhr) {
-            alert('error');
+        error: function (e) {
+            console.log(e);
         }
-    })
+    });
 
 }
 

@@ -1,0 +1,58 @@
+2019-08-22 10:53:13.5244|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+22/08/2019 10:53:13 a. m.
+2019-08-22 10:54:09.5414|INFO|VTIntranetD.Controllers.HomeController|Notice created VTIntranet for username: admin
+22/08/2019 10:54:09 a. m.
+2019-08-22 11:16:35.6245|ERROR|VTIntranetD.Models.Helpers.NoticeHelper|Invalid object name 'Notices'.
+22/08/2019 11:16:35 a. m.
+2019-08-22 11:48:41.6702|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+22/08/2019 11:48:41 a. m.
+2019-08-22 11:53:30.6950|ERROR|VTIntranetD.Models.Helpers.TagHelper|Invalid object name 'Tags'.
+22/08/2019 11:53:30 a. m.
+2019-08-22 11:54:58.8145|ERROR|VTIntranetD.Models.Helpers.TagHelper|Invalid object name 'Tags'.
+22/08/2019 11:54:58 a. m.
+2019-08-22 11:55:31.4732|ERROR|VTIntranetD.Models.Helpers.TagHelper|Invalid object name 'Tags'.
+22/08/2019 11:55:31 a. m.
+2019-08-22 11:56:17.9095|ERROR|VTIntranetD.Models.Helpers.NoticeHelper|Invalid object name 'Notices'.
+22/08/2019 11:56:17 a. m.
+2019-08-22 11:57:07.0388|ERROR|VTIntranetD.Models.Helpers.TagHelper|Invalid object name 'Tags'.
+22/08/2019 11:57:07 a. m.
+2019-08-22 12:10:07.8243|ERROR|VTIntranetD.Models.Helpers.TagHelper|Invalid object name 'Tags'.
+22/08/2019 12:10:07 p. m.
+2019-08-22 12:11:05.5851|ERROR|VTIntranetD.Models.Helpers.TagHelper|Invalid object name 'Tags'.
+22/08/2019 12:11:05 p. m.
+2019-08-22 12:12:38.1785|ERROR|VTIntranetD.Models.Helpers.TagHelper|Invalid object name 'Tags'.
+22/08/2019 12:12:38 p. m.
+2019-08-22 12:13:19.4426|ERROR|VTIntranetD.Models.Helpers.TagHelper|Invalid object name 'Tags'.
+22/08/2019 12:13:19 p. m.
+2019-08-22 12:31:52.6915|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+22/08/2019 12:31:52 p. m.
+2019-08-22 12:38:51.3738|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+22/08/2019 12:38:51 p. m.
+2019-08-22 12:49:41.4161|ERROR|VTIntranetD.Models.Helpers.DeptoHelper|Invalid object name 'Deptos'.
+22/08/2019 12:49:41 p. m.
+2019-08-22 13:08:01.4419|ERROR|VTIntranetD.Models.Helpers.DeptoHelper|Invalid object name 'Deptos'.
+22/08/2019 01:08:01 p. m.
+2019-08-22 13:08:30.6619|ERROR|VTIntranetD.Models.Helpers.DeptoHelper|Invalid object name 'Deptos'.
+22/08/2019 01:08:30 p. m.
+2019-08-22 13:09:18.8702|ERROR|VTIntranetD.Models.Helpers.DeptoHelper|Invalid object name 'Deptos'.
+22/08/2019 01:09:18 p. m.
+2019-08-22 13:10:19.1002|ERROR|VTIntranetD.Models.Helpers.DeptoHelper|Invalid object name 'Deptos'.
+22/08/2019 01:10:19 p. m.
+2019-08-22 13:12:48.1182|ERROR|VTIntranetD.Models.Helpers.DeptoHelper|Invalid object name 'Deptos'.
+22/08/2019 01:12:48 p. m.
+2019-08-22 13:13:50.9416|ERROR|VTIntranetD.Models.Helpers.DeptoHelper|Invalid object name 'Deptos'.
+22/08/2019 01:13:50 p. m.
+2019-08-22 13:18:43.5082|ERROR|VTIntranetD.Models.Helpers.DeptoHelper|Invalid object name 'Deptos'.
+22/08/2019 01:18:43 p. m.
+2019-08-22 13:44:36.9285|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+22/08/2019 01:44:36 p. m.
+2019-08-22 13:47:28.3336|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+22/08/2019 01:47:28 p. m.
+2019-08-22 14:39:30.6073|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+22/08/2019 02:39:30 p. m.
+2019-08-22 14:52:25.1636|ERROR|VTIntranetD.Models.Helpers.DeptoHelper|Invalid object name 'Deptos'.
+22/08/2019 02:52:25 p. m.
+2019-08-22 15:02:43.7273|ERROR|VTIntranetD.Models.Helpers.DeptoHelper|Invalid object name 'Deptos'.
+22/08/2019 03:02:43 p. m.
+2019-08-22 15:03:42.0030|ERROR|VTIntranetD.Models.Helpers.DeptoHelper|Invalid object name 'Deptos'.
+22/08/2019 03:03:42 p. m.

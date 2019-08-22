@@ -1,2 +1,58 @@
-2019-08-21 09:53:32.3549|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
-21/08/2019 09:53:32 a. m.
+2019-08-21 15:19:21.9791|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+21/08/2019 03:19:21 p. m.
+2019-08-21 15:34:01.8725|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+21/08/2019 03:34:01 p. m.
+2019-08-21 15:38:56.1787|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+21/08/2019 03:38:56 p. m.
+2019-08-21 16:08:17.8928|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+21/08/2019 04:08:17 p. m.
+2019-08-21 16:48:40.6301|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+21/08/2019 04:48:40 p. m.
+2019-08-21 16:58:31.3628|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+21/08/2019 04:58:31 p. m.
+2019-08-21 17:04:32.2760|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+21/08/2019 05:04:32 p. m.
+2019-08-21 17:04:51.0189|ERROR|VTIntranetD.Models.Helpers.NoticeHelper|Invalid object name 'Activitys'.
+21/08/2019 05:04:51 p. m.
+2019-08-21 17:06:45.9788|ERROR|VTIntranetD.Models.Helpers.NoticeHelper|Invalid column name 'idActivitys'.
+21/08/2019 05:06:45 p. m.
+2019-08-21 17:09:26.2287|ERROR|VTIntranetD.Models.Helpers.NoticeHelper|Invalid object name 'Notices'.
+21/08/2019 05:09:26 p. m.
+2019-08-21 17:15:22.5861|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+21/08/2019 05:15:22 p. m.
+2019-08-21 17:15:40.0688|ERROR|VTIntranetD.Models.Helpers.NoticeHelper|Invalid object name 'Notices'.
+21/08/2019 05:15:40 p. m.
+2019-08-21 17:18:00.3041|ERROR|VTIntranetD.Models.Helpers.NoticeHelper|Invalid object name 'Notices'.
+21/08/2019 05:18:00 p. m.
+2019-08-21 17:18:35.0914|ERROR|VTIntranetD.Models.Helpers.NoticeHelper|Invalid object name 'Notices'.
+21/08/2019 05:18:35 p. m.
+2019-08-21 17:21:47.1722|ERROR|VTIntranetD.Models.Helpers.NoticeHelper|Invalid object name 'Notices'.
+21/08/2019 05:21:47 p. m.
+2019-08-21 17:30:34.7500|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+21/08/2019 05:30:34 p. m.
+2019-08-21 17:30:59.9642|ERROR|VTIntranetD.Models.Helpers.NoticeHelper|Invalid object name 'Notices'.
+21/08/2019 05:30:59 p. m.
+2019-08-21 17:35:10.1123|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+21/08/2019 05:35:10 p. m.
+2019-08-21 17:45:48.7965|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+21/08/2019 05:45:48 p. m.
+2019-08-21 17:46:24.0485|INFO|VTIntranetD.Controllers.HomeController|Notice created for: admin
+21/08/2019 05:46:24 p. m.
+2019-08-21 17:52:07.0076|INFO|VTIntranetD.Controllers.HomeController|Notice created VTIntranet for: admin
+21/08/2019 05:52:07 p. m.
+2019-08-21 18:05:17.8715|ERROR|VTIntranetD.Models.Helpers.NoticeHelper|Referencia a objeto no establecida como instancia de un objeto. ConnectionString no encontrado en List<Notice> getAllNotice.
+21/08/2019 06:05:17 p. m.
+2019-08-21 18:15:41.2269|ERROR|VTIntranetD.Models.Helpers.NoticeHelper|Invalid object name 'Notices'.
+21/08/2019 06:15:41 p. m.
+2019-08-21 18:44:45.0333|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+21/08/2019 06:44:45 p. m.
+2019-08-21 18:46:10.9643|ERROR|VTIntranetD.Models.Helpers.NoticeHelper|Invalid object name 'Notices'.
+21/08/2019 06:46:10 p. m.
+2019-08-21 19:11:30.1066|ERROR|VTIntranetD.Controllers.SessionTimeOutAttribute|The Session Data is NULL, Return to Login System 
+21/08/2019 07:11:30 p. m.
+2019-08-21 19:11:57.3513|INFO|VTIntranetD.Controllers.LoginController|Initialize Session VTIntranet with username: admin
+21/08/2019 07:11:57 p. m.
+2019-08-21 19:12:02.2548|ERROR|VTIntranetD.Models.Helpers.NoticeHelper|Invalid object name 'Notices'.
+21/08/2019 07:12:02 p. m.
+2019-08-21 19:14:19.7487|ERROR|VTIntranetD.Models.Helpers.NoticeHelper|Invalid object name 'Notices'.
+21/08/2019 07:14:19 p. m.

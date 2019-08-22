@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -13,6 +14,7 @@ namespace VTIntranetD.Controllers
     public class HomeController : Controller
     {
         private SessionModel model;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         [SessionTimeOut]
         public ActionResult Index()
@@ -26,7 +28,7 @@ namespace VTIntranetD.Controllers
             ViewBag.UserName = model.UserName;
             ViewBag.rolName = model.RolName;
             ViewBag.news2 = serializedResult;
-            ViewBag.news = nh.getAllNotice();
+            //ViewBag.news = nh.getAllNotice();
             ViewBag.Navbar = SerializerNavBar(model.ProfileID);
             
             return View();
@@ -185,7 +187,15 @@ namespace VTIntranetD.Controllers
             var serializer = new JavaScriptSerializer();
             var serializedResult = serializer.Serialize(dh.GetAreaDepto(int.Parse(idDepto), idProfile));
 
-            return Json(serializedResult, JsonRequestBehavior.AllowGet);
+            if(serializedResult != "null")
+            {
+                return Json( new { success = true, data = serializedResult }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json( new { success = false, msgError = "Ocurrio un error, no se encontraron areas."}, JsonRequestBehavior.AllowGet);
+            }
+            
         }
 
         [SessionTimeOut]
@@ -199,7 +209,15 @@ namespace VTIntranetD.Controllers
             var serializer = new JavaScriptSerializer();
             var serializedResult = serializer.Serialize(dh.GetDepto(brand, idProfile));
 
-            return Json(serializedResult, JsonRequestBehavior.AllowGet);
+            if(serializedResult != "null")
+            {
+                return Json(new { success = true, data = serializedResult }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { success = false, msgError = "Ocurrio un problema, departamentos no disponibles."}, JsonRequestBehavior.AllowGet);
+            }
+            
         }
 
         [SessionTimeOut]
@@ -210,8 +228,15 @@ namespace VTIntranetD.Controllers
             NoticeHelper nh = new NoticeHelper();
             var Notice = nh.getNotice(id);
 
-            return Json(Notice, JsonRequestBehavior.AllowGet);
-
+            if(Notice != null)
+            {
+                return Json(new { success = true, data = Notice });
+            }
+            else
+            {
+                return Json(new { success = false, data = Notice, error = "Detalles de la noticia no disponibles." });
+            }
+            
         }
 
         [SessionTimeOut]
@@ -244,7 +269,15 @@ namespace VTIntranetD.Controllers
             var serializer = new JavaScriptSerializer();
             var serializedResult = serializer.Serialize(th.GetTagsAll());
 
-            return Json(serializedResult, JsonRequestBehavior.AllowGet);
+            if(serializedResult != "null")
+            {
+                return Json(new { success = true, data = serializedResult }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { success = false, msgError = "No se pueden agregar manuales. Intentelo más tarde."}, JsonRequestBehavior.AllowGet);
+            }
+            
         }
 
         [SessionTimeOut]
@@ -431,15 +464,25 @@ namespace VTIntranetD.Controllers
             };
 
             NoticeHelper nh = new NoticeHelper();
-            nh.CreateActivity(a, n);
+            if ((nh.CreateActivity(a, n)) == 1)
+            {
+                model = (SessionModel)this.Session["SessionData"];
 
-            return Json("successfully");
+                LogManager.Configuration.Variables["userid"] = model.UserID;
+                LogManager.Configuration.Variables["username"] = model.UserName;
+                logger.Info("Notice created VTIntranet for username: " + model.UserName + Environment.NewLine + DateTime.Now);
 
+                return Json(new { success = true, msg = "Noticia creada correctamente"});
+            }
+            else
+            {
+                return Json(new { success = false, msg = "Hubo un error al crear la noticia"});
+            }
+            
         }
 
         private String SerializerNavBar(string idProfile)
-        {
-            //var idProfile = Session["ProfileID"].ToString();
+        { 
             TagHelper th = new TagHelper();
             var serializer = new JavaScriptSerializer();
             var sR = serializer.Serialize(th.getTagsDeptos(int.Parse(idProfile)));

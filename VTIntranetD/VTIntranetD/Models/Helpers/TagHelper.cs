@@ -7,17 +7,27 @@ using System.Linq;
 using System.Web;
 using VTIntranetD.Models.Entities;
 using VTIntranetD.Models.Dto;
+using NLog;
 
 namespace VTIntranetD.Models.Helpers
 {
     public class TagHelper
     {
         private SqlConnection con;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private void Conectar()
         {
-            string constr = ConfigurationManager.ConnectionStrings["DB_Entities"].ToString();
-            con = new SqlConnection(constr);
+            try
+            {
+                string constr = ConfigurationManager.ConnectionStrings["DB_Entities"].ToString();
+                con = new SqlConnection(constr);
+            }
+            catch (NullReferenceException ex)
+            {
+                string errMsg = ex.Message;
+                logger.Error(errMsg + " ConnectionString en Conectar() no encontrado." + Environment.NewLine + DateTime.Now);
+            }
         }
 
         //get all tags for idProfile
@@ -26,36 +36,51 @@ namespace VTIntranetD.Models.Helpers
             Conectar();
             List<Brand> brands = new List<Brand>();
 
-            string query = @"SELECT Tag.idTag, Tag.tagName, Tag.tagClabe, Depto.idDepto, Depto.name, Depto.clabe
+            try
+            {
+                string query = @"SELECT Tag.idTag, Tag.tagName, Tag.tagClabe, Depto.idDepto, Depto.name, Depto.clabe
                             FROM Depto
                             INNER join ProfileTagDepto ON ProfileTagDepto.idDepto = Depto.idDepto
                             INNER join Tag ON Tag.idTag = ProfileTagDepto.idTag
                             WHERE ProfileTagDepto.idProfile = @idProfile and ProfileTagDepto.idParent = 0
                             Order By Tag.tagName, Depto.name;";
 
-            SqlCommand com = new SqlCommand(query, con);
-            com.Parameters.Add("@idProfile", SqlDbType.Int);
-            com.Parameters["@idProfile"].Value = idProfile;
-            con.Open();
-            SqlDataReader rows = com.ExecuteReader();
+                SqlCommand com = new SqlCommand(query, con);
+                com.Parameters.Add("@idProfile", SqlDbType.Int);
+                com.Parameters["@idProfile"].Value = idProfile;
+                con.Open();
+                SqlDataReader rows = com.ExecuteReader();
 
-            while (rows.Read())
-            {
-                Brand brand = new Brand()
+                while (rows.Read())
                 {
-                    IdTag = int.Parse(rows["idTag"].ToString()),
-                    TagName = rows["tagName"].ToString(),
-                    TagClabe = rows["tagClabe"].ToString(),
-                    IdDepto = int.Parse(rows["idDepto"].ToString()),
-                    DeptoName = rows["name"].ToString(),
-                    DeptoClabe = rows["clabe"].ToString()
+                    Brand brand = new Brand()
+                    {
+                        IdTag = int.Parse(rows["idTag"].ToString()),
+                        TagName = rows["tagName"].ToString(),
+                        TagClabe = rows["tagClabe"].ToString(),
+                        IdDepto = int.Parse(rows["idDepto"].ToString()),
+                        DeptoName = rows["name"].ToString(),
+                        DeptoClabe = rows["clabe"].ToString()
 
-                };
+                    };
 
-                brands.Add(brand);
+                    brands.Add(brand);
+                }
+
+                con.Close();
+            }
+            catch (NullReferenceException ex)
+            {
+                string errMsg = ex.Message;
+                logger.Error(errMsg + " ConnectionString no encontrado en TagHelper->getTagsDeptos." + Environment.NewLine + DateTime.Now);
+            }
+            catch (SqlException ex)
+            {
+                string errMsg = ex.Message;
+                logger.Error(errMsg + Environment.NewLine + DateTime.Now);
+                return null;
             }
 
-            con.Close();
             return brands;
 
         }
@@ -63,24 +88,40 @@ namespace VTIntranetD.Models.Helpers
         //get all tags
         public List<Tag> GetTagsAll()
         {
-            Conectar();
             List<Tag> tags = new List<Tag>();
 
-            SqlCommand com = new SqlCommand("SELECT * FROM Tag ORDER BY tagName;", con);
-            con.Open();
-            SqlDataReader registros = com.ExecuteReader();
-            while (registros.Read())
+            try
             {
-                Tag tag = new Tag
+                Conectar();
+                
+                SqlCommand com = new SqlCommand("SELECT * FROM Tag ORDER BY tagName;", con);
+                con.Open();
+                SqlDataReader registros = com.ExecuteReader();
+                while (registros.Read())
                 {
-                    idTag = int.Parse(registros["idTag"].ToString()),
-                    tagName = registros["tagName"].ToString(),
-                    clabe = registros["tagClabe"].ToString()
-                    //tagActive = int.Parse(registros["tagActive"].ToString())
-                };
-                tags.Add(tag);
+                    Tag tag = new Tag
+                    {
+                        idTag = int.Parse(registros["idTag"].ToString()),
+                        tagName = registros["tagName"].ToString(),
+                        clabe = registros["tagClabe"].ToString()
+                        //tagActive = int.Parse(registros["tagActive"].ToString())
+                    };
+                    tags.Add(tag);
+                }
+                con.Close();
             }
-            con.Close();
+            catch (NullReferenceException ex)
+            {
+                string errMsg = ex.Message;
+                logger.Error(errMsg + " ConnectionString no encontrado en TagHelper->GetTagsAll." + Environment.NewLine + DateTime.Now);
+            }
+            catch (SqlException ex)
+            {
+                string errMsg = ex.Message;
+                logger.Error(errMsg + Environment.NewLine + DateTime.Now);
+                return null;
+            }
+
             return tags;
         }
 
