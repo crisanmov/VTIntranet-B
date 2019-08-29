@@ -208,3 +208,9 @@ input[type="checkbox"] {
 #padredetodo.visible #deletear {
     display: inline-block
 }
+
+#val {
+    margin-top: 10px;
+    color: red;
+    font-size: 15px;
+}

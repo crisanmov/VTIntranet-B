@@ -358,7 +358,7 @@ function saveManual(fd) {
         alert('Entra a Editar');
 
     } else {
-        alert("1");
+        //alert("1");
         
         $.ajax({
             url: "/Home/SaveFilePdf/",
@@ -368,14 +368,18 @@ function saveManual(fd) {
             processData: false,
             type: 'POST',
             success: function (response) {
-                if (response === "successfully") {
 
+                //console.log(response);
+                if (response.success) {
+                    alert(response.msgError);
                     window.location.reload();
                     $('#myModal4').modal('hide');
                     $modal = $('#myModal4');
                     $modal.find('form')[0].reset();
                     $('#files').val('');
                     $('#list').empty();
+                } else {
+                    alert(response.msgError);
                 }
             }
         });

@@ -193,6 +193,7 @@ namespace VTIntranetD.Controllers
             }
             else
             {
+                logger.Error("Error al intentar obtener la información de las Areas en la db. " + Environment.NewLine + DateTime.Now);
                 return Json( new { success = false, msgError = "Ocurrio un error, no se encontraron areas."}, JsonRequestBehavior.AllowGet);
             }
             
@@ -215,6 +216,7 @@ namespace VTIntranetD.Controllers
             }
             else
             {
+                logger.Error("Error al intentar obtener la información de los departamentos en la db. " + Environment.NewLine + DateTime.Now);
                 return Json(new { success = false, msgError = "Ocurrio un problema, departamentos no disponibles."}, JsonRequestBehavior.AllowGet);
             }
             
@@ -234,6 +236,7 @@ namespace VTIntranetD.Controllers
             }
             else
             {
+                logger.Error("Error al intentar obtener la información detalles de noticia en la db. " + Environment.NewLine + DateTime.Now);
                 return Json(new { success = false, data = Notice, error = "Detalles de la noticia no disponibles." });
             }
             
@@ -284,73 +287,15 @@ namespace VTIntranetD.Controllers
         [HttpPost]
         public JsonResult SaveAlbum(IEnumerable<HttpPostedFileBase> filesPost)
         {
-            try
+           
+            foreach (var file in filesPost)
             {
-                foreach (var file in filesPost)
+                if (file.ContentLength > 0)
                 {
-                    if (file.ContentLength > 0)
-                    {
-                        string _FileName = Path.GetFileName(file.FileName);
-                        string extension = Path.GetExtension(_FileName);
-                        string idAlb = Convert.ToString(Request["idAlbum"]);
-                        int idMultimedia = 0;
-
-                        StringBuilder builder = new StringBuilder();
-                        Random random = new Random();
-                        char ch;
-                        for (int i = 0; i < _FileName.Length; i++)
-                        {
-                            ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
-                            builder.Append(ch);
-                        }
-                        string fileName = builder.ToString().ToLower();
-                        fileName = fileName + extension;
-                        System.Diagnostics.Debug.WriteLine(fileName);
-
-                        string _path = Path.Combine(Server.MapPath("~/UploadedFiles/events"), fileName);
-                        file.SaveAs(_path);
-
-                        Multimedia mult = new Multimedia
-                        {
-                            FileName = fileName,
-                            Path = "~/UploadedFiles/events/" + fileName
-                        };
-
-                        MultimediaHelper mh = new MultimediaHelper();
-                        idMultimedia = mh.CreateMultimedia(mult);
-                        var idAlbum = int.Parse(idAlb);
-                        mh.SaveEventMult(idAlbum, idMultimedia);
-
-                    }
-                }
-
-                return Json(new { success = true, responseText = "succesfully" }, JsonRequestBehavior.AllowGet);
-            }
-            catch
-            {
-                return Json("File upload failed!!");
-                
-            }
-
-        }
-
-        [SessionTimeOut]
-        [HttpPost]
-        public JsonResult SaveEvent(HttpPostedFileBase filePost)
-        {
-            try
-            {
-                if (filePost.ContentLength > 0)
-                {
-                    string title = Convert.ToString(Request["title"]);
-                    string url = Convert.ToString(Request["url"]);
-                    string description = Convert.ToString(Request["description"]);
-
-                    System.Diagnostics.Debug.WriteLine(title);
-                    System.Diagnostics.Debug.WriteLine(url);
-                    System.Diagnostics.Debug.WriteLine(description);
-
-                    string _FileName = Path.GetFileName(filePost.FileName);
+                    string _FileName = Path.GetFileName(file.FileName);
+                    string extension = Path.GetExtension(_FileName);
+                    string idAlb = Convert.ToString(Request["idAlbum"]);
+                    int idMultimedia = 0;
 
                     StringBuilder builder = new StringBuilder();
                     Random random = new Random();
@@ -361,34 +306,102 @@ namespace VTIntranetD.Controllers
                         builder.Append(ch);
                     }
                     string fileName = builder.ToString().ToLower();
-                    fileName = fileName + ".jpg";
+                    fileName = fileName + extension;
                     System.Diagnostics.Debug.WriteLine(fileName);
 
                     string _path = Path.Combine(Server.MapPath("~/UploadedFiles/events"), fileName);
-                    filePost.SaveAs(_path);
+                    file.SaveAs(_path);
 
-                    EventFull evt = new EventFull
+                    Multimedia mult = new Multimedia
                     {
-                        Title = title,
-                        Description = description,
                         FileName = fileName,
-                        Path = "~/UploadedFiles/events/" + fileName,
-                        Url = url
+                        Path = "~/UploadedFiles/events/" + fileName
                     };
 
-                    EventHelper eh = new EventHelper();
-                    eh.CreateActivity(evt);
+                    MultimediaHelper mh = new MultimediaHelper();
+                    idMultimedia = mh.CreateMultimedia(mult);
+                    var idAlbum = int.Parse(idAlb);
+
+                    if(idMultimedia != 0 && idAlbum != 0)
+                    {
+                       mh.SaveEventMult(idAlbum, idMultimedia);
+                    }
 
                 }
-
-                return Json(new { success = true, responseText = "succesfully" }, JsonRequestBehavior.AllowGet);
+                else
+                {
+                    logger.Error("Error al intentar crear el album en la db. " + Environment.NewLine + DateTime.Now);
+                    return Json(new { success = false, msgError = "Error, no se pudo crear el album." });
+                }
+                
             }
-            catch
+           
+            model = (SessionModel)this.Session["SessionData"];
+            logger.Info("Album create for username: " + model.UserName + Environment.NewLine + DateTime.Now);
+
+            return Json(new { success = true, msg = "Se genero el album para el evento correctamente." });
+        }
+
+        [SessionTimeOut]
+        [HttpPost]
+        public JsonResult SaveEvent(HttpPostedFileBase filePost)
+        {
+            int res = 0;
+            
+            if (filePost.ContentLength > 0)
             {
-                ViewBag.Message = "File upload failed!!";
-                return Json("Error");
-            }
+                string title = Convert.ToString(Request["title"]);
+                string url = Convert.ToString(Request["url"]);
+                string description = Convert.ToString(Request["description"]);
+                string _FileName = Path.GetFileName(filePost.FileName);
 
+                StringBuilder builder = new StringBuilder();
+                Random random = new Random();
+                char ch;
+                for (int i = 0; i < _FileName.Length; i++)
+                {
+                    ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
+                    builder.Append(ch);
+                }
+
+                string fileName = builder.ToString().ToLower();
+                fileName = fileName + ".jpg";
+                //System.Diagnostics.Debug.WriteLine(fileName);
+
+                string _path = Path.Combine(Server.MapPath("~/UploadedFiles/events"), fileName);
+                filePost.SaveAs(_path);
+
+                EventFull evt = new EventFull
+                {
+                    Title = title,
+                    Description = description,
+                    FileName = fileName,
+                    Path = "~/UploadedFiles/events/" + fileName,
+                    Url = url
+                };
+
+                EventHelper eh = new EventHelper();
+                res = eh.CreateActivity(evt);
+
+                if(res == 1)
+                {
+                    model = (SessionModel)this.Session["SessionData"];
+                    logger.Info("Evento create for username: " + model.UserName + Environment.NewLine + DateTime.Now);
+
+                    return Json(new { success = true, msg = "El evento " + title + " se ha creado correctamente." });
+                }
+                else
+                {
+                    logger.Error("Error al intentar crear un evento en la db. " + Environment.NewLine + DateTime.Now);
+                    return Json(new { success = false, msgError = "Error, no se pudo crear el evento." });
+                }
+            }
+            else
+            {
+                logger.Error("Error al intentar crear un evento. filePost < 0" + Environment.NewLine + DateTime.Now);
+                return Json(new { success = false, msgError = "Error, nose pudo crear el evento." }, JsonRequestBehavior.AllowGet);
+            }
+            
         }
 
         [SessionTimeOut]
@@ -396,53 +409,61 @@ namespace VTIntranetD.Controllers
         public JsonResult SaveFilePdf(IEnumerable<HttpPostedFileBase> attachmentPost)
         {
             int res = 0;
-            try
+            foreach (var file in attachmentPost)
             {
-                foreach (var file in attachmentPost)
+                if (file.ContentLength > 0)
                 {
-                    if (file.ContentLength > 0)
+                    String FileExt = Path.GetExtension(file.FileName).ToUpper();
+
+                    if (FileExt == ".PDF")
                     {
-                        String FileExt = Path.GetExtension(file.FileName).ToUpper();
+                        string title_temp = Convert.ToString(Request["title"]);
+                        string fileClabe = Convert.ToString(Request["fileClabe"]);
+                        string title =  fileClabe + Path.GetExtension(file.FileName);
+                        int idAttachment = 0;
 
-                        if (FileExt == ".PDF")
+                        string _path = Path.Combine(Server.MapPath("~/UploadedFiles/attachments/"), title);
+                        file.SaveAs(_path);
+
+                        Attachment attachment = new Attachment()
                         {
-                            string title_temp = Convert.ToString(Request["title"]);
-                            string fileClabe = Convert.ToString(Request["fileClabe"]);
-                            string title =  fileClabe + Path.GetExtension(file.FileName);
-                            int idAttachment = 0;
+                            AttachmentName = title,
+                            AttachmentDirectory = "~/UploadedFiles/attachments/" + title,
+                            AttachmentActive = "1",
+                        };
 
-                            string _path = Path.Combine(Server.MapPath("~/UploadedFiles/attachments/"), title);
-                            file.SaveAs(_path);
+                        AttachmentHelper at = new AttachmentHelper();
+                        //save references attachment
+                        idAttachment = at.CreateAttachment(attachment);
 
-                            Attachment attachment = new Attachment()
-                            {
-                                AttachmentName = title,
-                                AttachmentDirectory = "~/UploadedFiles/attachments/" + title,
-                                AttachmentActive = "1",
-                            };
-
-                            AttachmentHelper at = new AttachmentHelper();
-                            //save references attachment
-                            idAttachment = at.CreateAttachment(attachment);
-
+                        if(idAttachment == 0)
+                        {
+                            logger.Error("Error al intentar guardar el registro la información del documento en la db. " + Environment.NewLine + DateTime.Now);
+                                              }
+                        if(idAttachment != 0)
+                        {
                             int idTag = Convert.ToInt32(Request["idTag"]);
                             int idParent = Convert.ToInt32(Request["idParent"]);
                             int idDepto = Convert.ToInt32(Request["idDepto"]);
 
                             //create relationship
                             res = at.CreateRelationAttachment(idTag, idParent, idDepto, idAttachment);
-
                         }
-
                     }
                 }
-
-                return Json("successfully");
-               
             }
-            catch
+
+            if (res == 1)
             {
-                return Json("File upload failed!!");
+                model = (SessionModel)this.Session["SessionData"];
+
+                logger.Info("Documento guardado for username: " + model.UserName + Environment.NewLine + DateTime.Now);
+                return Json(new { success = true, msgError = "El Documento se guardo correctamente." });
+            }
+            else
+            {
+                logger.Error("Error al intentar guardar la información del documento en la db. " + Environment.NewLine + DateTime.Now);
+                return Json(new { success = false, msgError = "La información del documento no se pudo guardar." });
             }
         }
 
@@ -476,6 +497,7 @@ namespace VTIntranetD.Controllers
             }
             else
             {
+                logger.Error("Error al intentar al crear una noticia en la db. " + Environment.NewLine + DateTime.Now);
                 return Json(new { success = false, msg = "Hubo un error al crear la noticia"});
             }
             

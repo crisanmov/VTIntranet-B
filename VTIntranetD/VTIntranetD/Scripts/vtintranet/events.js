@@ -10,7 +10,6 @@ $('#titleEvt').attr("autocomplete", "off");
 $('#btnSaveEvt').click(function (e) {
     
     e.preventDefault();
-
     if ($('#msgValidate').length) {
         $("p").remove();
     }
@@ -24,7 +23,7 @@ $('#btnSaveEvt').click(function (e) {
     let fr = $('#fileEvt').prop('files')[0];
  
     if (fr === undefined) {
-        $('#validation').append("<p id='msgValidate' style='color: red; font-size: 15px'>Debes seleccionar un archivo</p>");
+        $('#val').append("<p id='msgValidate'>Debes seleccionar un archivo</p>");
         return;
     }
 
@@ -53,9 +52,12 @@ $('#btnSaveImg').click(function (e) {
 
     e.preventDefault();
     let fd = new FormData();
-/*-------------------------------------------------------*/
-
     let files = $('#files').prop('files');
+
+    if (files.length == 0) {
+        alert("No has seleccionado ninguna imagen.");
+    }
+    
     for (let i = 0; i < files.length; i++) {
         let file = files[i];
         fd.append('filesPost', file);
@@ -74,14 +76,20 @@ $('.close').click(function (e) {
 });
 
 function validateControl(...restArgs) {
-   
+    console.log("validate");
+
     let blank = 0;
     for (let i = 0; i < restArgs.length; i++) {
         blank = validateBlank(restArgs[i]);
     }
 
+    console.log(blank);
     if (blank === 1) { 
-        $('#validation').append("<p id='msgValidate' style='color: red; font-size: 15px'>El formulario no debe tener campos vacios</p>");
+        console.log("blank");
+        $('#val').append("<p id='msgValidate'>El formulario no debe tener campos vacios</p>");
+        console.log($('#validation'));
+        //$('#validation').append("<p id='msgValidate' style='color: red; font-size: 15px'>El formulario no debe tener campos vacios</p>");
+
         return;
     }
 }
@@ -96,6 +104,7 @@ function validateBlank(...restArgs) {
 }
 
 function saveEvent(formData) {
+    console.log(formData);
 
     $.ajax({
         url: "SaveEvent",
@@ -106,10 +115,14 @@ function saveEvent(formData) {
         type: 'POST',
         success: function (response) {
             if (response.success) {
+
+                alert(response.msg);
                 $modal = $('#myModal3');
                 $modal.find('form')[0].reset();
                 $('#myModal3').modal('hide');
                 location.reload();
+            } else {
+                alert(response.msgError);
             }
         }
     });
@@ -127,11 +140,14 @@ function saveAlbum(fd) {
         success: function (response) {
             if (response.success) {
 
+                alert(response.msg);
                 $('#myModal4').modal('hide');
                 $modal = $('#myModal4');
                 $modal.find('form')[0].reset();
                 $('#files').val('');
                 $('#list').empty();
+            } else {
+                alert(response.msgError);
             }
         }
     });

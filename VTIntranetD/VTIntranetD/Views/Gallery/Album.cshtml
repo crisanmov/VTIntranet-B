@@ -264,19 +264,24 @@
                 -webkit-transform: rotate(45deg);
                 transform: rotate(45deg);
             }
+
+        .notFound{
+            color: orange;
+            font-style: italic;
+        }
     </style>
 </head>
 <div id="todo-album" class="prueba">
     <h2>@ViewBag.Title</h2>
     <hr />
     <!--Images gallery-->
-    @if (ViewBag.rolName != "admin")
+    @if (ViewBag.rolName == "admin")
     {
         <div style="width:95%; margin:0 auto"><button id="del-img" class="btn btn-primary">Seleccionar imagenes</button><button id="deletear" class="btn btn-primary" style="margin-left:1%">Eliminar imagenes</button></div>
     }
 
     <div id="myGallery" class="prueba"></div>
-
+    <div id="validateContent" style="text-align: center;"></div>
     <div id="myModal" class="modal">
         <span class="close cursor" onclick="closeModal()">&times;</span>
         <div class="modal-content" id="modal-content">
@@ -309,6 +314,21 @@
         $(document).ready(function () {
 
             var images = "@ViewBag.images";
+
+            if (images == "null") {
+                
+                let vText = document.createElement('h2');
+                vText.innerHTML = "No se Encontraron images para este album.";
+                vText.setAttribute('class', 'notFound');
+                let vContent = document.createElement('IMG');
+                vContent.style.width = "50%";
+                vContent.setAttribute('src', '/UploadedFiles/imagesNotFound.png');
+                vContent.setAttribute('alt', 'imagesNotFound');
+                $('#validateContent').append(vText);
+                $('#validateContent').append(vContent);
+                return;
+            }
+
             images = images.replace(/&quot;/g, '"');
             images = images.replace(/ /g, "");
             let json = JSON.parse(images);

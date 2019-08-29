@@ -1,8 +1,24 @@
 ﻿$(document).ready(function () {
-
     let json = JSON.parse(events.replace(/&quot;/g, '"'));
-    createCardEvent(json);
+    
+    if (json == null) {
 
+        let vText = document.createElement('h2');
+        vText.innerHTML = "No se encontro ningún album.";
+        vText.setAttribute('class', 'notFound');
+        let gallery = document.querySelector('#validatG');
+        let divContainer = document.createElement('DIV');
+        let img = document.createElement('img');
+        img.setAttribute('src', '/UploadedFiles/albumNotFound.png');
+        img.setAttribute('alt', 'imagesNotFound');
+        img.style.width = "35%";
+        divContainer.append(vText);
+        divContainer.append(img);
+        gallery.append(divContainer);
+        return;
+    } else {
+        createCardEvent(json);
+    }
 });
 
 function createCardEvent(json) {
@@ -31,10 +47,14 @@ function createCardEvent(json) {
 
         let promise = getPortrait(idAlbum);
         promise.then(function (value) {
-            for (let i = 0; i < value.length; i++) {
+            
+            if (value.data.length == 0) {
+                return;
+            }
+       
+            for (let i = 0; i < value.data.length; i++) {
                 let src = "/UploadedFiles/events/";
-                src += value[i].FileName;
-                //console.log(data[i].FileName);
+                src += value.data[i].FileName;
                 let img = document.createElement('img');
                 let asd = document.createElement('div');
                 img.setAttribute("class", "img-album");
@@ -42,42 +62,46 @@ function createCardEvent(json) {
                 divImg.append(asd);
                 asd.append(img);
             }
+
+            divContainer.append(divImg);
+
+            let divCard = document.createElement('DIV');
+            divCard.setAttribute('class', 'card-body');
+            divCard.style.width = '100%';
+            divCard.style.marginLeft = '2%';
+
+            let h5 = document.createElement('h5');
+            h5.setAttribute('class', 'card-title');
+            h5.innerHTML = json[i].Title;
+
+            let p = document.createElement('p');
+            p.setAttribute('class', 'card-text');
+            p.innerHTML = json[i].Description;
+
+            let a = document.createElement('a');
+            a.setAttribute('class', 'btn btn-primary');
+            a.setAttribute('href', '/Gallery/Album?idEvent=' + json[i].IdEvent);
+            a.innerHTML = 'Ver Álbum';
+
+            divCard.append(h5);
+            divCard.append(p);
+            divCard.append(a);
+            divContainer.append(divCard);
+            gallery.append(divContainer);
+
+        }).catch(function (e) {
+            
+            //console.log(e);
+            
+            
         });
-
-        divContainer.append(divImg);
-
-        let divCard = document.createElement('DIV');
-        divCard.setAttribute('class', 'card-body');
-        divCard.style.width = '100%';
-        divCard.style.marginLeft = '2%';
-
-        let h5 = document.createElement('h5');
-        h5.setAttribute('class', 'card-title');
-        h5.innerHTML = json[i].Title;
-
-        let p = document.createElement('p');
-        p.setAttribute('class', 'card-text');
-        p.innerHTML = json[i].Description;
-
-        let a = document.createElement('a');
-        a.setAttribute('class', 'btn btn-primary');
-        a.setAttribute('href', '/Gallery/Album?idEvent=' + json[i].IdEvent);
-        a.innerHTML = 'Ver Álbum';
-
-        divCard.append(h5);
-        divCard.append(p);
-        divCard.append(a);
-        divContainer.append(divCard);
-        gallery.append(divContainer);
-
     }
-
 }
 
 async function getPortrait(idAlbum) {
 
     const result = $.ajax({
-        url: 'getPortrait/?idAlbum=' + idAlbum,
+        url: 'Gallery/GetPortrait/?idAlbum=' + idAlbum,
         dataType: 'json',
         type: 'GET',
         contentType: 'application/json; charset=utf-8',

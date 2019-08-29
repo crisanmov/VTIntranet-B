@@ -1,6 +1,9 @@
 ﻿'use strict'
 
 var jsonTags = JSON.parse(tags.replace(/&quot;/g, '"'));
+
+console.log(jsonTags);
+
 var tagObject = {};
 var brand = [];
 //Array for save states to each modal areas
@@ -22,7 +25,7 @@ $(document).ready(function () {
         let btn_state = btn[0].innerHTML;
 
         if (btn_state === 'OFF') {
-            btn_enable(btn);
+            
             let area = btn.next()[0].innerHTML;
             let idTag = btn[0].value;
             let idDepto = btn.next()[0].id;
@@ -174,20 +177,28 @@ function getAreas(idTag, idDepto, area, btn) {
         data: { idDepto: idDepto },
         success: function (response) {
 
-            const depto = new Depto(idTag, area, response);
-            let index = deptos.length;
-            deptos.push(depto);
-            btn.prev()[0].id = index;
-            let keys = Object.keys(depto.getAreas());
+            console.log(response);
+            if (response.success) {
+                const depto = new Depto(idTag, area, response.data);
+                let index = deptos.length;
+                deptos.push(depto);
+                btn.prev()[0].id = index;
+                let keys = Object.keys(depto.getAreas());
 
-            if ($('#area_content').childElementCount != 0) {
-                document.querySelector('#area_content').innerHTML = '';
-            }
+                if ($('#area_content').childElementCount != 0) {
+                    document.querySelector('#area_content').innerHTML = '';
+                }
 
-            for (let i = 0; i < keys.length; i++) {
+                for (let i = 0; i < keys.length; i++) {
 
-                let tmp = depto.getArea(i);
-                setModal(tmp.IdDepto, tmp.Name, tmp.State, area, index);
+                    let tmp = depto.getArea(i);
+                    setModal(tmp.IdDepto, tmp.Name, tmp.State, area, index);
+                }
+
+                btn_enable(btn);
+
+            } else {
+                alert(response.msgError);
             }
         }
     });
@@ -251,12 +262,17 @@ function saveUser(user, nameProfile, deptosD, rolName) {
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({ user: user, nameProfile: nameProfile, deptosD: deptosD, rolName: rolName}),
         success: function (response) {
-            alert("El Usuario se ha generado correctamente");
-            $('#__AjaxAntiForgeryForm')[0].reset();
-            window.location.reload();
+            console.log(response);
+            if (response.success) {
+                alert(response.msg);
+                $('#__AjaxAntiForgeryForm')[0].reset();
+                window.location.reload();
+            } else {
+                alert(response.msgError);
+            }
         },
         error: function (e) {
-
+            alert(e);
         }
 
     });

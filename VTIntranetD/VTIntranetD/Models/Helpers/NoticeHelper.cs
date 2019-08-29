@@ -106,7 +106,7 @@ namespace VTIntranetD.Models.Helpers
                     catch (NullReferenceException ex)
                     {
                         string errMsg = ex.Message;
-                        logger.Error(errMsg + " ConnectionString no encontrado en NoticeHelpCreateActivity." + Environment.NewLine + DateTime.Now);
+                        logger.Error(errMsg + " ConnectionString no encontrado en NoticeHelper->CreateActivity." + Environment.NewLine + DateTime.Now);
                     }
                     catch (SqlException ex)
                     {

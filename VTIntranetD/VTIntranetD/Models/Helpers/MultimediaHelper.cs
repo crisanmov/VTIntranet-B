@@ -6,18 +6,29 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using VTIntranetD.Models.Dto;
+using NLog;
 
 namespace VTIntranetD.Models.Helpers
 {
     public class MultimediaHelper
     {
         private SqlConnection con;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         //connection db
         private void Conectar()
         {
-            string constr = ConfigurationManager.ConnectionStrings["DB_Entities"].ToString();
-            con = new SqlConnection(constr);
+            try
+            {
+                string constr = ConfigurationManager.ConnectionStrings["DB_Entities"].ToString();
+                con = new SqlConnection(constr);
+            }
+            catch (NullReferenceException ex)
+            {
+                string errMsg = ex.Message;
+                logger.Error(errMsg + " ConnectionString en Conectar() no encontrado." + Environment.NewLine + DateTime.Now);
+            }
+
         }
 
         //getAll Multimedia
@@ -26,7 +37,9 @@ namespace VTIntranetD.Models.Helpers
             Conectar();
             List<Multimedia> portrait = new List<Multimedia>();
 
-            string q = @"SELECT Event.idEvent, Activity.title, Activity.description, 
+            try
+            {
+                string q = @"SELECT Event.idEvent, Activity.title, Activity.description, 
                             Multimedia.fileName, Multimedia.idMultimedia, Multimedia.path 
                         FROM Event 
                         INNER JOIN EventMult ON Event.idEvent = EventMult.idEvent 
@@ -36,23 +49,36 @@ namespace VTIntranetD.Models.Helpers
                         ORDER BY Multimedia.idMultimedia
                         OFFSET 0 ROWS FETCH FIRST 4 ROWS ONLY";
 
-            SqlCommand com = new SqlCommand(q, con);
-            com.Parameters.Add("@idAlbum", SqlDbType.Int);
-            com.Parameters["@idAlbum"].Value = idAlbum;
-            con.Open();
-            SqlDataReader rows = com.ExecuteReader();
-            while (rows.Read())
-            {
-                Multimedia img = new Multimedia()
+                SqlCommand com = new SqlCommand(q, con);
+                com.Parameters.Add("@idAlbum", SqlDbType.Int);
+                com.Parameters["@idAlbum"].Value = idAlbum;
+                con.Open();
+                SqlDataReader rows = com.ExecuteReader();
+                while (rows.Read())
                 {
-                    IdMultimedia = int.Parse(rows["idMultimedia"].ToString()),
-                    FileName = rows["fileName"].ToString(),
-                    Path = rows["path"].ToString()
+                    Multimedia img = new Multimedia()
+                    {
+                        IdMultimedia = int.Parse(rows["idMultimedia"].ToString()),
+                        FileName = rows["fileName"].ToString(),
+                        Path = rows["path"].ToString()
 
-                };
-                portrait.Add(img);
+                    };
+                    portrait.Add(img);
+                }
+                con.Close();
             }
-            con.Close();
+            catch (NullReferenceException ex)
+            {
+                string errMsg = ex.Message;
+                logger.Error(errMsg + " ConnectionString no encontrado en MultimediaHelper->GetAlbumPortriat." + Environment.NewLine + DateTime.Now);
+            }
+            catch (SqlException ex)
+            {
+                string errMsg = ex.Message;
+                logger.Error(errMsg + Environment.NewLine + DateTime.Now);
+                return null;
+            }
+
             return portrait;
         }
 
@@ -61,20 +87,38 @@ namespace VTIntranetD.Models.Helpers
         {
             Conectar();
 
-            SqlCommand addEvent = new SqlCommand("INSERT INTO Multimedia(fileName, path) values (@fileName, @path)", con);
-            addEvent.Parameters.Add("@fileName", SqlDbType.VarChar);
-            addEvent.Parameters.Add("@path", SqlDbType.VarChar);
-            addEvent.Parameters["@fileName"].Value = mult.FileName;
-            addEvent.Parameters["@path"].Value = mult.Path;
+            int r = 0;
+            int idMultimedia = 0;
 
-            con.Open();
-            int r = addEvent.ExecuteNonQuery();
-            con.Close();
+            try
+            {
+                SqlCommand addEvent = new SqlCommand("INSERT INTO Multimedia(fileName, path) values (@fileName, @path)", con);
+                addEvent.Parameters.Add("@fileName", SqlDbType.VarChar);
+                addEvent.Parameters.Add("@path", SqlDbType.VarChar);
+                addEvent.Parameters["@fileName"].Value = mult.FileName;
+                addEvent.Parameters["@path"].Value = mult.Path;
 
-            SqlCommand com = new SqlCommand("SELECT MAX(idMultimedia) FROM Multimedia", con);
-            con.Open();
-            int idMultimedia = Convert.ToInt32(com.ExecuteScalar());
-            con.Close();
+                con.Open();
+                r = addEvent.ExecuteNonQuery();
+                con.Close();
+
+                SqlCommand com = new SqlCommand("SELECT MAX(idMultimedia) FROM Multimedia", con);
+                con.Open();
+                idMultimedia = Convert.ToInt32(com.ExecuteScalar());
+                con.Close();
+            }
+            catch (NullReferenceException ex)
+            {
+                string errMsg = ex.Message;
+                logger.Error(errMsg + " ConnectionString no encontrado en MultimediaHelper->CreateMultimedia." + Environment.NewLine + DateTime.Now);
+            }
+            catch (SqlException ex)
+            {
+                string errMsg = ex.Message;
+                logger.Error(errMsg + Environment.NewLine + DateTime.Now);
+                return 0;
+            }
+
 
             if (r == 1)
             {
@@ -91,16 +135,32 @@ namespace VTIntranetD.Models.Helpers
         public int SaveEventMult(int idEvt, int idMult)
         {
             Conectar();
+            int r = 0;
 
-            SqlCommand evtMult = new SqlCommand("INSERT INTO EventMult(idEvent, idMult) values (@idEvent, @idMultimedia)", con);
-            evtMult.Parameters.Add("@idEvent", SqlDbType.Int);
-            evtMult.Parameters.Add("@idMultimedia", SqlDbType.Int);
-            evtMult.Parameters["@idEvent"].Value = idEvt;
-            evtMult.Parameters["@idMultimedia"].Value = idMult;
+            try
+            {
+                SqlCommand evtMult = new SqlCommand("INSERT INTO EventMult(idEvent, idMult) values (@idEvent, @idMultimedia)", con);
+                evtMult.Parameters.Add("@idEvent", SqlDbType.Int);
+                evtMult.Parameters.Add("@idMultimedia", SqlDbType.Int);
+                evtMult.Parameters["@idEvent"].Value = idEvt;
+                evtMult.Parameters["@idMultimedia"].Value = idMult;
 
-            con.Open();
-            int r = evtMult.ExecuteNonQuery();
-            con.Close();
+                con.Open();
+                r = evtMult.ExecuteNonQuery();
+                con.Close();
+            }
+            catch (NullReferenceException ex)
+            {
+                string errMsg = ex.Message;
+                logger.Error(errMsg + " ConnectionString no encontrado en MultimediaHelper->SaveEventMult." + Environment.NewLine + DateTime.Now);
+            }
+            catch (SqlException ex)
+            {
+                string errMsg = ex.Message;
+                logger.Error(errMsg + Environment.NewLine + DateTime.Now);
+                return 0;
+            }
+
 
             return r;
 
@@ -112,29 +172,44 @@ namespace VTIntranetD.Models.Helpers
             Conectar();
             List<Multimedia> album = new List<Multimedia>();
 
-            string query = @"SELECT Multimedia.idMultimedia, Event.idEvent, Multimedia.fileName, Multimedia.path
+            try
+            {
+                string query = @"SELECT Multimedia.idMultimedia, Event.idEvent, Multimedia.fileName, Multimedia.path
                             FROM Event
                             INNER JOIN EventMult ON Event.idEvent = EventMult.idEvent
                             INNER JOIN Activity ON Activity.idActivity = Event.idActivity
                             INNER JOIN Multimedia ON Multimedia.idMultimedia = EventMult.idMult
                             WHERE Event.idEvent = @idEvent;";
 
-            SqlCommand com = new SqlCommand(query, con);
-            com.Parameters.Add("@idEvent", SqlDbType.Int);
-            com.Parameters["@idEvent"].Value = idEvent;
-            con.Open();
-            SqlDataReader rows = com.ExecuteReader();
-            while (rows.Read())
-            {
-                Multimedia img = new Multimedia()
+                SqlCommand com = new SqlCommand(query, con);
+                com.Parameters.Add("@idEvent", SqlDbType.Int);
+                com.Parameters["@idEvent"].Value = idEvent;
+                con.Open();
+                SqlDataReader rows = com.ExecuteReader();
+                while (rows.Read())
                 {
-                    IdMultimedia = int.Parse(rows["idMultimedia"].ToString()),
-                    FileName = rows["fileName"].ToString(),
-                    Path = "/UploadedFiles/events/" + rows["fileName"].ToString()
+                    Multimedia img = new Multimedia()
+                    {
+                        IdMultimedia = int.Parse(rows["idMultimedia"].ToString()),
+                        FileName = rows["fileName"].ToString(),
+                        Path = "/UploadedFiles/events/" + rows["fileName"].ToString()
 
-                };
-                album.Add(img);
+                    };
+                    album.Add(img);
+                }
             }
+            catch (NullReferenceException ex)
+            {
+                string errMsg = ex.Message;
+                logger.Error(errMsg + " ConnectionString no encontrado en MultimediaHelper->GetImages." + Environment.NewLine + DateTime.Now);
+            }
+            catch (SqlException ex)
+            {
+                string errMsg = ex.Message;
+                logger.Error(errMsg + Environment.NewLine + DateTime.Now);
+                return null;
+            }
+
             return album;
         }
     }

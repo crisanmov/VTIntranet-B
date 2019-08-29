@@ -13,7 +13,8 @@ using System.Web.Script.Serialization;
 using VTIntranetD.Models.Entities;
 using VTIntranetD.Models.Helpers;
 using VTIntranetD.Models.Dto;
-
+using System.Data.Entity.Infrastructure;
+using NLog;
 
 namespace VTIntranetD.Controllers
 {
@@ -21,6 +22,7 @@ namespace VTIntranetD.Controllers
     {
         private SessionModel model;
         private UserDataModel db = new UserDataModel();
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         [SessionTimeOut]
         // GET: Users
@@ -72,45 +74,60 @@ namespace VTIntranetD.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Hash PASSWORD
-                user.password = Hash(user.password);
-                db.User.Add(user);
-                db.SaveChanges();
-
-                UserHelper uh = new UserHelper();
-                int idUser = uh.GetUser();
-
-                Profile p = new Profile {
-                    name = nameProfile,
-                    rolName = rolName,
-                    profileActive = user.userActive.Equals("1"),
-                    idUser = idUser,
-                };
-                db.Profile.Add(p);
-                db.SaveChanges();
-
-                var profile = db.Profile.Where(a => a.idUser.Equals(p.idUser)).FirstOrDefault();
-                int idProfile = Convert.ToInt32(profile.idProfile);
-
-                for (int i = 0; i < deptosD.Count; i++)
+                try
                 {
-                    ProfileTagDepto ptd = new ProfileTagDepto {
-                        idProfile = idProfile,
-                        idTag = int.Parse(deptosD[i].idTag),
-                        idParent = deptosD[i].idParent,
-                        idDepto = deptosD[i].idDepto,
-                        active = true,
-                    };
-
-                    db.ProfileTagDepto.Add(ptd);
+                    //Hash PASSWORD
+                    user.password = Hash(user.password);
+                    db.User.Add(user);
                     db.SaveChanges();
+
+                    UserHelper uh = new UserHelper();
+                    int idUser = uh.GetUser();
+
+                    Profile p = new Profile
+                    {
+                        name = nameProfile,
+                        rolName = rolName,
+                        profileActive = user.userActive.Equals("1"),
+                        idUser = idUser,
+                    };
+                    db.Profile.Add(p);
+                    db.SaveChanges();
+
+                    var profile = db.Profile.Where(a => a.idUser.Equals(p.idUser)).FirstOrDefault();
+                    int idProfile = Convert.ToInt32(profile.idProfile);
+
+                    for (int i = 0; i < deptosD.Count; i++)
+                    {
+                        ProfileTagDepto ptd = new ProfileTagDepto
+                        {
+                            idProfile = idProfile,
+                            idTag = int.Parse(deptosD[i].idTag),
+                            idParent = deptosD[i].idParent,
+                            idDepto = deptosD[i].idDepto,
+                            active = true,
+                        };
+
+                        db.ProfileTagDepto.Add(ptd);
+                        db.SaveChanges();
+                    }
+                 
+                }
+                catch (DbUpdateException e)
+                {
+                    string errMsg = e.Message;
+                    logger.Error(errMsg + Environment.NewLine + DateTime.Now);
                 }
 
-                return Json("successfully");
+                model = (SessionModel)this.Session["SessionData"];
+                logger.Info("Nuevo usuario creado en VTIntranet for username: " + model.UserName + Environment.NewLine + DateTime.Now);
+
+                return Json(new { success = true, msg = "El usuario " + nameProfile + " se creo correctamente." });
             }
             else
             {
-                return Json("Error");
+                logger.Error("Intento fallido al crear nuevo usuario. " + Environment.NewLine + DateTime.Now);
+                return Json(new { success = false, msgError = "El usuario no se pudo crear correctamente." });
             }
         }
 
@@ -193,7 +210,15 @@ namespace VTIntranetD.Controllers
             DeptoHelper dh = new DeptoHelper();
             var Areas = dh.GetArea(int.Parse(idDepto), Convert.ToInt32(model.ProfileID));
 
-            return Json(Areas, JsonRequestBehavior.AllowGet);
+            if(Areas == null)
+            {
+                logger.Info("Areas no disponibles para crear nuevo usuario." + Environment.NewLine + DateTime.Now);
+                return Json(new { success = false, data = Areas, msgError = "Areas No Disponibles para este Depto." }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { success = true, data = Areas }, JsonRequestBehavior.AllowGet);
+            } 
         }
 
         public static string Hash(string input)

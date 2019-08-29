@@ -6,12 +6,14 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using VTIntranetD.Models.Helpers;
 using VTIntranetD.Models.Dto;
+using NLog;
 
 namespace VTIntranetD.Controllers
 {
     public class GalleryController : Controller
     {
         private SessionModel model;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         [SessionTimeOut]
         // GET: Gallery
@@ -43,8 +45,11 @@ namespace VTIntranetD.Controllers
             var serializer = new JavaScriptSerializer();
             var serializedResult = serializer.Serialize(mh.GetImages(idEvent));
 
+            ViewBag.UserName = model.UserName;
             ViewBag.rolName = model.RolName;
             ViewBag.images = serializedResult;
+
+            model = (SessionModel)this.Session["SessionData"];
             ViewBag.events = eh.GetAllEvent();
             ViewBag.Navbar = SerializerNavBar(model.ProfileID);
 
@@ -53,12 +58,21 @@ namespace VTIntranetD.Controllers
 
         [SessionTimeOut]
         [HttpGet]
-        public JsonResult getPortrait(String idAlbum)
+        public JsonResult GetPortrait(String idAlbum)
         {
             MultimediaHelper mh = new MultimediaHelper();
             var Portrait = mh.GetAlbumPortriat(Int32.Parse(idAlbum));
 
-            return Json(Portrait, JsonRequestBehavior.AllowGet);
+            if(Portrait == null)
+            {
+                logger.Error("Error al intentar crear el album en la db. " + Environment.NewLine + DateTime.Now);
+                return Json(new { success = false, msgError ="No se encontro portada del album."}, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { success = true, data = Portrait, msg = "Portada con idAlbum " + idAlbum }, JsonRequestBehavior.AllowGet);
+            }
+            
         }
 
         private String SerializerNavBar(string idProfile)
