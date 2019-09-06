@@ -574,6 +574,7 @@
     <Content Include="Scripts\vtintranet\gallery.js" />
     <Content Include="Scripts\vtintranet\notices.js" />
     <Content Include="Scripts\vtintranet\usersCreate.js" />
+    <Content Include="Scripts\vtintranet\usersEdit.js" />
     <Content Include="Scripts\vtintranet\usersValidation.js" />
     <Content Include="Scripts\vtintranet\_Layout.js" />
     <Content Include="Scripts\vtintranet\_Layout2.js" />

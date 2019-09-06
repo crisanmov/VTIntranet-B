@@ -78,40 +78,84 @@ jQuery(document).ready(function ($) {
     });
 
     $('#btnSavePdf').click(function (e) {
-
         e.preventDefault();
-        //validate form
+    
+        //save same file for all tags
+        /*let cboxAlltags = document.querySelector('#cboxAllTags');
+        if (cboxAlltags.checked) {
 
- 
-        let title = $('#titlePdf').val();
-        let fileClabe = title + "-" + $('#FormControlTag option:selected').attr('value');
+            //validate 
+
+
+            let obj = {
+                title: $('#titlePdf').val()
+            }
+
+            saveManualAllTags('Home/SaveAllTagsFile', obj)
+            .then(data => console.log(data))
+            .catch(error => console.log(error))
+        }*/
+
+        //validate
+
+        //let title = $('#titlePdf').val();
+        //let fileClabe = title + "-" + $('#FormControlTag option:selected').attr('value');
         let files = $('#filePdf').prop('files');
-        let idTag = $('#FormControlTag option:selected').attr('id');
-        let idParent = $('#FormControlDepto option:selected').attr('value');
-        //let fileClabe = brand_clabe + '-' + depto_clabe;
 
         for (let i = 0; i < $('.borrar-area').length; i++) {
 
-            let idDepto = $('.borrar-area')[i].id
-            let formData = new FormData();
+            let idDepto = $('.borrar-area')[i].id;
+            let idTag = $('#FormControlTag option:selected').attr('id');
+            let idParent = $('#FormControlDepto option:selected').attr('value');
+            
+            for (let j = 0; j < files.length; j++) {
 
-            formData.append('title', title)
-            formData.append('idTag', idTag);
-            formData.append('idParent', idParent);
-            formData.append('idDepto', idDepto);
-            formData.append('fileClabe', fileClabe);
+                let formData = new FormData();
+                formData.append('idTag', idTag);
+                formData.append('idParent', idParent);
+                formData.append('idDepto', idDepto);
+                formData.append('attachmentPost', files[j]);
+
+                saveManual(formData);
+            }
+        }
+
+        
+
+        /*for (let i = 0; i < $('.borrar-area').length; i++) {
 
             //save all file formData
             for (let i = 0; i < files.length; i++) {
-                let file = files[i];
-                formData.append('attachmentPost', file);
-            }
+                console.log(files[i]);
 
-            //save Attachment
-            saveManual(formData);
-        }
+                let idDepto = $('.borrar-area')[i].id
+                let formData = new FormData();
+
+                //formData.append('title', title)
+                formData.append('idTag', idTag);
+                formData.append('idParent', idParent);
+                formData.append('idDepto', idDepto);
+                //formData.append('fileClabe', fileClabe);
+
+                let file = files[i];
+                formData.append('attachmentPost', file[i]);
+                saveManual(formData);
+            }
+        }*/
     });
 
+    /*$('#cboxAllTags').change(function (e) {
+        if (this.checked) {
+            let divSelects = document.querySelector('#selectsForFile');
+            divSelects.style.display = "none";
+        }
+
+        if (!this.checked) {
+            let divSelects = document.querySelector('#selectsForFile');
+            divSelects.style.display = "block";
+        }
+
+    });*/
 });
 
 function createMenu(menuInfo) {
@@ -313,8 +357,6 @@ function populateListDepto(brand) {
 
 function populateListTag() {
 
-    
-
     $.ajax({
         url: '/Home/GetTags/',
         dataType: 'json',
@@ -369,9 +411,9 @@ function saveManual(fd) {
             type: 'POST',
             success: function (response) {
 
-                //console.log(response);
+                console.log(response);
                 if (response.success) {
-                    alert(response.msgError);
+                    //alert(response.msgError);
                     window.location.reload();
                     $('#myModal4').modal('hide');
                     $modal = $('#myModal4');
@@ -387,3 +429,14 @@ function saveManual(fd) {
 
 
 }
+
+/*function saveManualAllTags(url, data) {
+    return fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: new Headers({
+            'Content-Type': 'application/json'
+        }),
+    })
+    .then(response => response.json())
+}*/

@@ -139,12 +139,32 @@ namespace VTIntranetD.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             User user = db.User.Find(id);
             if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+
+            //get profile user to edit
+            UserHelper uh = new UserHelper();
+            var res = uh.GetIDProfile((int)id);
+
+            if(res != 0)
+            {
+                model = (SessionModel)this.Session["SessionData"];
+
+                ViewBag.rolName = model.RolName;
+                ViewBag.UserName = model.UserName;
+                ViewBag.Navbar = SerializerNavBar(model.ProfileID);
+                ViewBag.Navbar2 = SerializerNavBar(res.ToString());
+                return View(user);
+            }
+            else
+            {
+                return View();
+            }
+            
         }
 
         // POST: Users/Edit/5

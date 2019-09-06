@@ -414,12 +414,15 @@ namespace VTIntranetD.Controllers
                 if (file.ContentLength > 0)
                 {
                     String FileExt = Path.GetExtension(file.FileName).ToUpper();
+                    
 
                     if (FileExt == ".PDF")
                     {
-                        string title_temp = Convert.ToString(Request["title"]);
-                        string fileClabe = Convert.ToString(Request["fileClabe"]);
-                        string title =  fileClabe + Path.GetExtension(file.FileName);
+                        //string title_temp = Convert.ToString(Request["title"]);
+                        //string fileClabe = Convert.ToString(Request["fileClabe"]);
+                        //string title =  fileClabe + Path.GetExtension(file.FileName);
+
+                        string title = file.FileName;
                         int idAttachment = 0;
 
                         string _path = Path.Combine(Server.MapPath("~/UploadedFiles/attachments/"), title);
@@ -458,7 +461,7 @@ namespace VTIntranetD.Controllers
                 model = (SessionModel)this.Session["SessionData"];
 
                 logger.Info("Documento guardado for username: " + model.UserName + Environment.NewLine + DateTime.Now);
-                return Json(new { success = true, msgError = "El Documento se guardo correctamente." });
+                return Json(new { success = true, msg = "El Documento se guardo correctamente." });
             }
             else
             {
@@ -466,6 +469,13 @@ namespace VTIntranetD.Controllers
                 return Json(new { success = false, msgError = "La información del documento no se pudo guardar." });
             }
         }
+
+        //[SessionTimeOut]
+        //[HttpPost]
+        /*public JsonResult SaveAllTagsFile(string title)
+        {
+            return Json("q");
+        }*/
 
         [SessionTimeOut]
         [HttpPost]

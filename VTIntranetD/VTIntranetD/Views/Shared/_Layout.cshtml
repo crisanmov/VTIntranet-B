@@ -107,41 +107,46 @@
                                 <div class="modal-body">
                                     <div id="validationPdf"></div>
                                     <!--title-->
-                                    <label for="FormControlPdf">Nombre del Manual</label>
+                                    <!--<label for="FormControlPdf">Nombre del Manual</label>
                                     <input class="form-control" type="text" placeholder="Titulo" name="title" id="titlePdf">
-                                    <br />
-                                    <!--select tag-->
-                                    <div class="form-group">
-                                        <label for="FormControlTag">Empresa</label>
-                                        <select class="form-control" id="FormControlTag">
-                                            <option value="seleccion">Selecciona una opción...</option>
-                                        </select>
-                                    </div>
-                                    <!--select depto-->
-                                    <div class="form-group">
-                                        <label for="FormControlDepto">Departamento</label>
-                                        <select class="form-control" id="FormControlDepto">
-                                            <option value="seleccion">Selecciona una opción...</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <div id="areas-listas"></div>
-                                        <label for="FormControlArea">Area</label>
-                                        <select class="form-control" id="FormControlArea">
-                                            <option value="seleccion" disabled="disabled">Selecciona una opción...</option>
-                                        </select>
+                                    <br />-->
+                                    <!--All Tags-->
+                                    <!--<label for="FormAllTags"><input type="checkbox" id="cboxAllTags" value=""> Agregar para todas las empresas</label>
+                                    <hr />-->
+                                    <div id="selectsForFile">
+                                        <!--select tag-->
+                                        <div class="form-group">
+                                            <label for="FormControlTag">Empresa</label>
+                                            <select class="form-control" id="FormControlTag">
+                                                <option value="seleccion">Selecciona una opción...</option>
+                                            </select>
+                                        </div>
+                                        <!--select depto-->
+                                        <div class="form-group">
+                                            <label for="FormControlDepto">Departamento</label>
+                                            <select class="form-control" id="FormControlDepto">
+                                                <option value="seleccion">Selecciona una opción...</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <div id="areas-listas"></div>
+                                            <label for="FormControlArea">Area</label>
+                                            <select class="form-control" id="FormControlArea">
+                                                <option value="seleccion" disabled="disabled">Selecciona una opción...</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class='col-sm-12'>
                                             <div class="form-group">
                                                 <label for="exampleFormControlTextarea1">Archivo</label>
-                                                <input type="file" class="btn btn-default" value="" id="filePdf" accept="application/pdf" />
+                                                <input type="file" class="btn btn-default" value="" id="filePdf" accept="application/pdf" multiple="multiple"/>
                                             </div>
                                         </div>
                                     </div>
                                     <!--save PDF-->
                                     <div style="text-align:center; padding:0 5px">
-                                        <input type="submit" class="btn btn-default" value="Guardar" id="btnSavePdf" />
+                                        <input type="submit" class="btn btn-primary" value="Guardar" id="btnSavePdf" />
                                         <!--<button type="button" class="btn btn-default" data-dismiss="modal" id="btnClose">Cerrar</button>-->
                                     </div>
 

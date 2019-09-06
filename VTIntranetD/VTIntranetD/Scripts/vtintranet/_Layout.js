@@ -41,7 +41,7 @@ function getBrandDepto(brands_raw, brands) {
             let brand = brands_raw[j].TagName;
             if (brand === ban) {
                 //build elements for json
-                let depto = { idTag: brands_raw[j].IdTag, TagClabe: brands_raw[j].TagClabe, idDepto: brands_raw[j].IdDepto, deptoName: brands_raw[j].DeptoName };
+                let depto = { idTag: brands_raw[j].IdTag, TagClabe: brands_raw[j].TagClabe, idDepto: brands_raw[j].IdDepto, deptoName: brands_raw[j].DeptoName, active: brands_raw[j].Active };
                 deptos.push(depto);
             }
         }

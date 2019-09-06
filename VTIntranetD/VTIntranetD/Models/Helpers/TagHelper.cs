@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -60,8 +61,8 @@ namespace VTIntranetD.Models.Helpers
                         TagClabe = rows["tagClabe"].ToString(),
                         IdDepto = int.Parse(rows["idDepto"].ToString()),
                         DeptoName = rows["name"].ToString(),
-                        DeptoClabe = rows["clabe"].ToString()
-
+                        DeptoClabe = rows["clabe"].ToString(),
+                        Active = 0
                     };
 
                     brands.Add(brand);

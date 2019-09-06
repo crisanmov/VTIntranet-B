@@ -13,5 +13,6 @@ namespace VTIntranetD.Models.Dto
         public string TagClabe { get; set; }
         public string DeptoName { get; set; }
         public string DeptoClabe { get; set; }
+        public int Active { get; set; }
     }
 }

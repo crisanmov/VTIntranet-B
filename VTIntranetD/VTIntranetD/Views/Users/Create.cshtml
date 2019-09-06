@@ -26,8 +26,9 @@
     @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
     {
         @Html.AntiForgeryToken()
-        
+
         <div class="form-horizontal pl-3">
+            <!--**************Información Personal*****************-->
             <h4>Información Personal</h4>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -53,6 +54,7 @@
                 </div>
             </div>
             <hr />
+            <!--**************Información Laboral*****************-->
             <h4>Información Laboral</h4>
             <br />
             <div class="form-group">
@@ -80,18 +82,19 @@
                 </div>
             </div>
             <hr />
+            <!--**************Material de Accesso*****************-->
             <h4>Material de Acceso</h4>
             <br />
             <div class="divtags">
                 <table id="mtags" class="mtags"></table>
             </div>
             <hr />
+            <!--**************Información de la Cuenta*****************-->
             <h4>Información de la Cuenta</h4>
             <div class="form-group">
                 @Html.LabelFor(model => model.username, "Nombre de Usuario", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-7">
                     @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
-                    
                 </div>
             </div>
             <div class="form-group">
@@ -143,6 +146,7 @@
             </div>
         </div>
     </div>
+
     <!--<button type="button" id="chunche">Check Object</button>-->
     <script src="~/Scripts/jquery-3.3.1.min.js"></script>
     <!--Functions _Layout-->

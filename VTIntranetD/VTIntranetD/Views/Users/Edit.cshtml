@@ -1,75 +1,87 @@
 ﻿@model VTIntranetD.Models.Entities.User
 
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
 }
-
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Edit</title>
+    <title>Editar Usuario</title>
+    <link rel="Stylesheet" href="@Href("~/Content/vtintranet/usersCreate.css")" />
+    <style>
+        .modal-body {
+            margin: 15px
+        }
+        .fa-clipboard-list {
+            color: #21356a;
+            font-size: 20px;
+        }
+    </style>
 </head>
 <body>
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-        
+
         <div class="form-horizontal">
-            <h4>User</h4>
+            <h4>Editar información del Usuario</h4>
             <hr />
+            <div>
+                @Html.ActionLink("Regresar a Usuarios", "Index")
+            </div>
+            <br />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.HiddenFor(model => model.idUser)
-    
+
             <div class="form-group">
-                @Html.LabelFor(model => model.username, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.username, "Nombre de Usuario", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
                 </div>
             </div>
-    
-            <div class="form-group">
+
+            <!--<div class="form-group">
                 @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
                 </div>
-            </div>
-    
+            </div>-->
+
             <div class="form-group">
-                @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.name, "Nombre", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
                 </div>
             </div>
-    
+
             <div class="form-group">
-                @Html.LabelFor(model => model.lastNameP, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.lastNameP, "Apellido Paterno", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.lastNameP, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.lastNameP, "", new { @class = "text-danger" })
                 </div>
             </div>
-    
+
             <div class="form-group">
-                @Html.LabelFor(model => model.lastNameM, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.lastNameM, "Apellido Materno", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.lastNameM, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.lastNameM, "", new { @class = "text-danger" })
                 </div>
             </div>
-    
-            <div class="form-group">
+
+            <!--<div class="form-group">
                 @Html.LabelFor(model => model.userActive, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.userActive, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.userActive, "", new { @class = "text-danger" })
                 </div>
-            </div>
-    
+            </div>-->
+
             <div class="form-group">
                 @Html.LabelFor(model => model.skype, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -77,17 +89,49 @@
                     @Html.ValidationMessageFor(model => model.skype, "", new { @class = "text-danger" })
                 </div>
             </div>
-    
+
+            <hr />
+            <!--**************Material de Accesso*****************-->
+            <h4>Material de Acceso</h4>
+            <br />
+            <div class="divtags">
+                <table id="mtags" class="mtags"></table>
+            </div>
+            <hr />
+
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-default" />
+                    <input type="submit" value="Guardar" class="btn btn-primary" />
                 </div>
             </div>
         </div>
     }
-    
-    <div>
-        @Html.ActionLink("Back to List", "Index")
+    <!-- Modal -->
+    <div class="modal fade" id="selectAreas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Selecciona las Areas para Añadir al Usuario...</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span style="font-size:xx-large; color:blue !important; cursor:pointer;" aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5 id="area"></h5>
+                    <div id="area_content"></div>
+                </div>
+            </div>
+        </div>
     </div>
+    <!--******************************SCRIPTS**********************************-->
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <!--Functions _Layout-->
+    <script src="~/Scripts/vtintranet/_Layout.js"></script>
+    <script src="~/Scripts/class/Depto.js"></script>
+    <script>
+        var tags = "@ViewBag.Navbar";
+        var permsUser = "@ViewBag.Navbar2";
+    </script>
+    <script src="~/Scripts/vtintranet/usersEdit.js"></script>
 </body>
 </html>
